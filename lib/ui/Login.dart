@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
 
-class Home extends StatelessWidget {
+class LoginData {
+  final String email;
+  final String password;
+
+  LoginData(this.email, this.password);
+}
+
+class _LoginData {
+  String email = "";
+  String password = "";
+}
+
+class Login extends StatelessWidget {
   final String title;
-  Home({Key key, this.title}) : super(key: key);
+  Login({Key key, this.title}) : super(key: key);
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -20,7 +32,7 @@ class Home extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(child: HomeBody(),)
+      body: Center(child: LoginBody(),)
     );
   }
   _displaySnackBar(BuildContext context, String action) {
@@ -33,18 +45,19 @@ class Home extends StatelessWidget {
   }
 }
 
-class HomeBody extends StatefulWidget {
+class LoginBody extends StatefulWidget {
   @override
-  _HomeBodyState createState() => _HomeBodyState();
+  LoginBodyState createState() => LoginBodyState();
 }
 
-class _HomeBodyState extends State<HomeBody> {
+class LoginBodyState extends State<LoginBody> {
   final _formKey = GlobalKey<FormState>();
+  final _loginData = List<LoginData>.generate(10, (i) => LoginData("icksan$i@gmail.com","icksan$i"));
+  _LoginData _data = _LoginData();
 
   @override
   Widget build(BuildContext context) {
-    return
-      ListView(
+    return ListView(
         children: [
           Form(
             key: _formKey,
@@ -78,6 +91,8 @@ class _HomeBodyState extends State<HomeBody> {
                         return "Tolong input email";
                       } else if(!RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$").hasMatch(value)) {
                         return "Email tidak valid";
+                      } else {
+                        _data.email = value;
                       }
                     },
                   ),
@@ -93,9 +108,12 @@ class _HomeBodyState extends State<HomeBody> {
                             borderRadius: BorderRadius.circular(3.3)
                         )
                     ),
+                    // ignore: missing_return
                     validator: (value) {
                       if(value.isEmpty) {
                         return "Tolong input password";
+                      } else {
+                        _data.password = value;
                       }
                     },
                   ),
@@ -109,21 +127,20 @@ class _HomeBodyState extends State<HomeBody> {
                         child: RaisedButton(
                           onPressed: () {
                             if(_formKey.currentState.validate()) {
-                              Scaffold.of(context)
-                                  .showSnackBar(
-                                  SnackBar(
-                                    content: Text("Login sukses !"),
-                                    backgroundColor: Colors.lightGreen,
-                                  )
-                              );
+                              var index = 0;
+                              for(var element in _loginData) {
+                                if(_data.email == element.email && _data.password == element.password) {
+                                  _showSnackBar("Login", "");
+                                    break;
+                                } else {
+                                  index+=1;
+                                  if(index == _loginData.length-1) {
+                                    _showSnackBar("Login", "red");
+                                  }
+                                }
+                              }
                             } else {
-                              Scaffold.of(context)
-                                  .showSnackBar(
-                                  SnackBar(
-                                    content: Text("Login gagal !"),
-                                    backgroundColor: Colors.red,
-                                  )
-                              );
+                              _showSnackBar("Login", "red");
                             }
                           },
                           child: Text("Login"),
@@ -148,9 +165,14 @@ class _HomeBodyState extends State<HomeBody> {
         ],
       );
   }
-}
-
-class _LoginData {
-  String email = "";
-  String password = "";
+  _showSnackBar(String action, String color) {
+    return Scaffold.of(context)
+        .showSnackBar(
+        SnackBar(
+          content: Text("$action "+ (color.isEmpty ? "sukses !" : "gagal !" )),
+          backgroundColor: (color.isEmpty) ? Colors.greenAccent : Colors.red,
+          duration: Duration(hours: 0, minutes: 0,seconds: 0, milliseconds: 400, microseconds: 0),
+        )
+    );
+  }
 }
