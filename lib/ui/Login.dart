@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 class LoginData {
   final String email;
   final String password;
+  final String name;
 
-  LoginData(this.email, this.password);
+  LoginData(this.email, this.password, this.name);
 }
 
 class _LoginData {
-  String email = "";
-  String password = "";
+  String email;
+  String password;
 }
 
 class Login extends StatelessWidget {
@@ -22,7 +23,7 @@ class Login extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text(title),
+        title: Text('Login'),
         actions: [
           IconButton(
             icon: Icon(Icons.account_circle),
@@ -52,8 +53,10 @@ class LoginBody extends StatefulWidget {
 
 class LoginBodyState extends State<LoginBody> {
   final _formKey = GlobalKey<FormState>();
-  final _loginData = List<LoginData>.generate(10, (i) => LoginData("icksan$i@gmail.com","icksan$i"));
+  final _loginData = List<LoginData>.generate(10, (i) => LoginData("icksan$i@gmail.com","icksan$i","Icksan Nugraha $i"));
   _LoginData _data = _LoginData();
+
+  LoginBodyState();
 
   @override
   Widget build(BuildContext context) {
@@ -130,17 +133,23 @@ class LoginBodyState extends State<LoginBody> {
                               var index = 0;
                               for(var element in _loginData) {
                                 if(_data.email == element.email && _data.password == element.password) {
-                                  _showSnackBar("Login", "");
+                                  _showSnackBar(Text("Login sukses !"), Colors.greenAccent);
+                                  List<String> user = new List<String>();
+                                  user.add(element.name);
+                                  user.add(element.email);
+                                  Navigator.pop(context, user);
                                     break;
                                 } else {
+                                  debugPrint(_data.email);
+                                  debugPrint(element.password);
                                   index+=1;
                                   if(index == _loginData.length-1) {
-                                    _showSnackBar("Login", "red");
+                                    _showSnackBar(Text("Login gagal !"), Colors.red);
                                   }
                                 }
                               }
                             } else {
-                              _showSnackBar("Login", "red");
+                              _showSnackBar(Text("Login gagal !"), Colors.red);
                             }
                           },
                           child: Text("Login"),
@@ -165,12 +174,12 @@ class LoginBodyState extends State<LoginBody> {
         ],
       );
   }
-  _showSnackBar(String action, String color) {
+  _showSnackBar(Text action, Color color) {
     return Scaffold.of(context)
         .showSnackBar(
         SnackBar(
-          content: Text("$action "+ (color.isEmpty ? "sukses !" : "gagal !" )),
-          backgroundColor: (color.isEmpty) ? Colors.greenAccent : Colors.red,
+          content: action,
+          backgroundColor: color,
           duration: Duration(hours: 0, minutes: 0,seconds: 0, milliseconds: 400, microseconds: 0),
         )
     );
