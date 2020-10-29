@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'Login.dart';
+import 'package:firebase_database/firebase_database.dart';
+
+final FirebaseDatabase database = FirebaseDatabase.instance;
 
 class Home extends StatelessWidget {
   Home({Key key, this.title}) : super(key: key);
@@ -122,7 +125,11 @@ class _MenuContent extends StatelessWidget {
       margin: EdgeInsets.all(10.0),
       child: InkWell(
         onTap: () {
-
+          database.reference().child("message").set({
+            "action" : "Clicked",
+            "status" : "true",
+            "aye": "aye"
+          });
         },
         splashColor: Colors.grey,
         child: Center(

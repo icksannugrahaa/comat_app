@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "204331029562",
+    "firebase_url": "https://fir-comatapp.firebaseio.com",
+    "project_id": "fir-comatapp",
+    "storage_bucket": "fir-comatapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:204331029562:android:504b6021da076f79cb5103",
+        "android_client_info": {
+          "package_name": "com.sh.comat.comat_apps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "204331029562-dok11psra7u6srcpdga56e6uq2viaspg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sh.comat.comat_apps",
+            "certificate_hash": "fdf7924b1238f19f2c30ceeff469073af79bf905"
+          }
+        },
+        {
+          "client_id": "204331029562-gas8rdgplr2i62nqsdi1o0s1stg47a95.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_RauMnmOiT0Uyb6JlB_tEBWfuIyC990g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "204331029562-gas8rdgplr2i62nqsdi1o0s1stg47a95.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
