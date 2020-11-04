@@ -1,4 +1,5 @@
 import 'package:comat_apps/ui/Home.dart';
+import 'package:comat_apps/ui/wrapper.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp( MainApp() );
@@ -11,7 +12,8 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: title,
-      home: Home(title: title),
+      // home: Home(title: title),
+      home: Wrapper(),
     );
   }
 }

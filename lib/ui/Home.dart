@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'Login.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'Login.dart';
 
 final FirebaseDatabase database = FirebaseDatabase.instance;
 
@@ -49,7 +49,7 @@ class HomeBody extends StatelessWidget {
 
 class _DrawerMenu extends StatelessWidget {
 //  _UserData _userData = new _UserData(kelas: "A1", email: "icksannugrahaa@gmail.com", name: "Icksan Nugraha");
-    _UserData _userData = new _UserData();
+  _UserData _userData = new _UserData();
 
   @override
   Widget build(BuildContext context) {
@@ -68,15 +68,8 @@ class _DrawerMenu extends StatelessWidget {
             accountName: (_userData.name != null) ? Text(_userData.name) : Text(""),
             accountEmail: (_userData.email  != null) ? Text(_userData.email) : Text(""),
             currentAccountPicture: (_userData.name  != null) ? CircleAvatar(
-              backgroundColor: Colors.white,
-              child: Text(
-                "I",
-                style: TextStyle(fontSize: 40.0),
-              ),
-            ) : CircleAvatar(
-              backgroundColor: Colors.white,
-              child: Image.asset('images/circle_account.png',color: Colors.black54,),
-            ),
+              backgroundImage: NetworkImage(_userData.photoURL),
+            ) : CircleAvatar(),
           ),
           ListTile(
             leading: Icon(Icons.account_circle),
@@ -84,6 +77,7 @@ class _DrawerMenu extends StatelessWidget {
             onTap: () {
               if(_userData.name == null) {
                 _navigateAndDisplaySelection(context);
+//                Navigator.pop(context);
               }
             },
           ),
@@ -95,6 +89,16 @@ class _DrawerMenu extends StatelessWidget {
               // ...
             },
           ),
+          ListTile(
+            leading: Icon(Icons.exit_to_app),
+            title: Text('Logout'),
+            onTap: () {
+              _userData.photoURL = null;
+              _userData.name = null;
+              _userData.email = null;
+              Navigator.pop(context);
+            },
+          ),
         ],
       ),
     );
@@ -102,12 +106,10 @@ class _DrawerMenu extends StatelessWidget {
   _navigateAndDisplaySelection(BuildContext context) async {
     // Navigator.push returns a Future that completes after calling
     // Navigator.pop on the Selection Screen.
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Login()),
-    );
-    _userData.email = result[0];
-    _userData.name = result[1];
+    final result = await Navigator.push(context,MaterialPageRoute(builder: (context) => Login()));
+    _userData.email = result.email;
+    _userData.name = result.displayName;
+    _userData.photoURL = result.photoURL;
   }
 }
 
@@ -147,7 +149,8 @@ class _MenuContent extends StatelessWidget {
 }
 
 class _UserData {
-  _UserData({this.email, this.name});
+  _UserData({this.email, this.name, this.photoURL});
   String email;
   String name;
+  String photoURL;
 }
