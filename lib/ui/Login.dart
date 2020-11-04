@@ -1,4 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
+final GoogleSignIn _googleSignIn = GoogleSignIn();
 
 class LoginData {
   final String email;
@@ -55,6 +62,9 @@ class LoginBodyState extends State<LoginBody> {
   final _formKey = GlobalKey<FormState>();
   final _loginData = List<LoginData>.generate(10, (i) => LoginData("icksan$i@gmail.com","icksan$i","Icksan Nugraha $i"));
   _LoginData _data = _LoginData();
+  String name;
+  String email;
+  String imageUrl;
 
   LoginBodyState();
 
@@ -167,6 +177,38 @@ class LoginBodyState extends State<LoginBody> {
                       ),
                     ],
                   ),
+                ),
+                Container(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SignInButton(
+                        Buttons.Google,
+                        text: "Sign up with Google",
+                        onPressed: () {
+                          signInWithGoogle().then((result) {
+                            if (result != null) {
+                              print(result);
+                              Navigator.pop(context, result.user);
+                            }
+                          });
+                        },
+                      ),
+                    )
+                  ),
+                ),
+                Container(
+                  child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: RaisedButton(
+                          onPressed: () {
+                            signOutGoogle();
+                          },
+                          child: Text("Logout"),
+                        ),
+                      )
+                  ),
                 )
               ],
             ),
@@ -183,5 +225,47 @@ class LoginBodyState extends State<LoginBody> {
           duration: Duration(hours: 0, minutes: 0,seconds: 0, milliseconds: 400, microseconds: 0),
         )
     );
+  }
+  Future<UserCredential> signInWithGoogle() async {
+    await Firebase.initializeApp();
+
+    final GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+    final UserCredential authResult = await _auth.signInWithCredential(credential);
+    final User user = authResult.user;
+
+    if (user != null) {
+      // Add the following lines after getting the user
+      // Checking if email and name is null
+      assert(user.email != null);
+      assert(user.displayName != null);
+      assert(user.photoURL != null);
+
+      // Store the retrieved data
+      name = user.displayName;
+      email = user.email;
+      imageUrl = user.photoURL;
+
+      // Only taking the first part of the name, i.e., First Name
+      if (name.contains(" ")) {
+        name = name.substring(0, name.indexOf(" "));
+      }
+
+      print('signInWithGoogle succeeded: $user');
+
+      return authResult;
+    }
+
+    return null;
+  }
+  void signOutGoogle() async{
+    await _googleSignIn.signOut();
+
+    print("User Signed Out");
   }
 }

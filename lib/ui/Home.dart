@@ -106,8 +106,8 @@ class _DrawerMenu extends StatelessWidget {
       context,
       MaterialPageRoute(builder: (context) => Login()),
     );
-    _userData.email = result[0];
-    _userData.name = result[1];
+    _userData.email = result.email;
+    _userData.name = result.displayName;
   }
 }
 
