@@ -14,7 +14,7 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   final _formKey = GlobalKey<FormState>();
-  final AuthService _authService = AuthService(); 
+  final AuthService _authService = AuthService();
   bool loading = false;
   String email = '';
   String password = '';
@@ -105,8 +105,8 @@ class _SignInState extends State<SignIn> {
                                 });
                               } else {
                                 print('sign in email and password success');
-                                print(result.uid);
                                 Navigator.pop(context);
+                                setState(() => loading = false);
                               }
                             }
                           },
@@ -133,17 +133,17 @@ class _SignInState extends State<SignIn> {
                         Buttons.Google,
                         padding: EdgeInsets.only(left: 25.0),
                         onPressed: () async{
+                          setState(() => loading = true);
                           dynamic result = await _authService.signInWithGoogle();
-                          // setState(() => loading = true);
                           if(result == null) {
                             print('sign in google error');
-                            // setState(() {
-                            //   error = "sign in google error";
-                            //   loading = false;
-                            // });
+                            setState(() {
+                              error = "sign in google error";
+                              loading = false;
+                            });
                           } else {
+                            setState(() => loading = false);
                             print('sign in google success');
-                            print(result.uid);
                             Navigator.pop(context);
                           }
                         },

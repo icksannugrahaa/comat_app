@@ -1,3 +1,4 @@
+import 'package:comat_apps/helpers/loading.dart';
 import 'package:comat_apps/services/auth.dart';
 import 'package:flutter/material.dart';
 
@@ -12,14 +13,15 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
-  final AuthService _authService = AuthService(); 
+  final AuthService _authService = AuthService();
+  bool loading = false;
   String email;
   String password;
   String error = '';
   
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
       appBar: AppBar(
         title: Text("Sign Up"),
       ),
@@ -93,45 +95,19 @@ class _SignUpState extends State<SignUp> {
                         child: RaisedButton(
                           onPressed: () async {
                             // dynamic result = await _authService.signInAnon();
-                            // if(result == null) {
-                            //   print('sign in anounymous error');
-                            // } else {
-                            //   print('sign in anounymous success');
-                            //   print(result.uid);
-                            // }
                             if(_formKey.currentState.validate()) {
-                              print(email);
-                              print(password);
+                              setState(() => loading = true);
                               dynamic result = await _authService.registerWithEmailAndPassword(email, password);
-                              print(result);
-                              if(result != null) {
-                                // _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Login Gagal'),));
-                                Navigator.pop(context);
+                              if(result == null) {
+                                setState(() {
+                                  error = "Email sudah digunakan !!";
+                                  loading = false;
+                                });
                               } else {
-                                error = "Email sudah digunakan !!";
+                                setState(() => loading = false);
+                                Navigator.pop(context);
                               }
                             }
-                            //   var index = 0;
-                            //   for(var element in _loginData) {
-                            //     if(_data.email == element.email && _data.password == element.password) {
-                            //       _showSnackBar(Text("Login sukses !"), Colors.greenAccent);
-                            //       List<String> user = new List<String>();
-                            //       user.add(element.name);
-                            //       user.add(element.email);
-                            //       Navigator.pop(context, user);
-                            //         break;
-                            //     } else {
-                            //       debugPrint(_data.email);
-                            //       debugPrint(element.password);
-                            //       index+=1;
-                            //       if(index == _loginData.length-1) {
-                            //         _showSnackBar(Text("Login gagal !"), Colors.red);
-                            //       }
-                            //     }
-                            //   }
-                            // } else {
-                            //   _showSnackBar(Text("Login gagal !"), Colors.red);
-                            // }
                           },
                           child: Text("Sign Up"),
                         ),

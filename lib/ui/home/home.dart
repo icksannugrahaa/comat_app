@@ -1,26 +1,40 @@
+// import 'package:comat_apps/models/user.dart';
+import 'package:comat_apps/models/event.dart';
 import 'package:comat_apps/models/user.dart';
+import 'package:comat_apps/models/user_detail.dart';
+import 'package:comat_apps/ui/custom_widget/float_btn.dart';
+import 'package:comat_apps/ui/event/event_list.dart';
+import 'package:comat_apps/ui/home/user_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:comat_apps/services/database.dart';
 
 class Home extends StatelessWidget {
   Home({Key key, this.title, this.drawer}) : super(key: key);
   final String title;
-  final Drawer drawer;
+  final Widget drawer;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          title: Text(title),
-          leading: IconButton(
-            icon: Icon(Icons.apps),
-            onPressed: () => _scaffoldKey.currentState.openDrawer(),
+    return StreamProvider<List<Event>>.value(
+          value: DatabaseService().events,
+          catchError: (context, error) {
+            print(error);
+          },
+          child: Scaffold(
+          key: _scaffoldKey,
+          appBar: AppBar(
+            title: Text(title),
+            leading: IconButton(
+              icon: Icon(Icons.apps),
+              onPressed: () => _scaffoldKey.currentState.openDrawer(),
+            ),
           ),
-        ),
-        body: Center(child: HomeBody(),),
-        drawer: drawer,
+          body: HomeBody(),
+          drawer: drawer,
+          floatingActionButton: FancyFab(icon: Icons.add, tooltip: 'Open Menu',),
+      ),
     );
   }
 }
@@ -29,63 +43,51 @@ class HomeBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    return ListView(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: _loginCard(user)
-        ),
-        GridView.count(
-          shrinkWrap: true,   
-          physics: ClampingScrollPhysics(),
-          crossAxisCount: 2,
-          children: [
-            _MenuContent(text: "Jadwal", textSize: 19, icon: Icons.calendar_today, iconSize: 100, color: Colors.black),
-            GridView.count(
-                crossAxisCount: 2,
-                children: [
-                  _MenuContent(text: "Jadwal", textSize: 12, icon: Icons.calendar_today, iconSize: 30, color: Colors.black),
-                  _MenuContent(text: "Jadwal", textSize: 12, icon: Icons.calendar_today, iconSize: 30, color: Colors.black),
-                  _MenuContent(text: "Jadwal", textSize: 12, icon: Icons.calendar_today, iconSize: 30, color: Colors.black),
-                  _MenuContent(text: "Jadwal", textSize: 12, icon: Icons.calendar_today, iconSize: 30, color: Colors.black),
-                ],
-            )
-          ],
-        )
-      ],
+    return SingleChildScrollView(
+      physics: ScrollPhysics(),
+      child: Column(
+        children: [
+          _loginCard(user),
+          EventList()
+        ],
+      ),
     );
   }
 
   _loginCard(User user) {
     if(user != null) {
-      return Card(
-        clipBehavior: Clip.antiAlias,
-        child: Column(
-          children: [
-            ListTile(
-              leading: Image.network("https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png",
-                width: 90,
-                height: 90,
-              ),
-              title: const Text('Icksan Nugraha'),
-              subtitle: Text(
-                'icksannugrahaa@gmail.com',
-                style: TextStyle(color: Colors.black.withOpacity(0.6)),
-              ),
+      return StreamBuilder<UserDetail>(
+        stream: DatabaseService(uid: user.uid).userData,
+        builder: (context, snapshot) {
+          UserDetail userDetail = snapshot.data;
+          return userDetail == null ? Center(child: CircularProgressIndicator()) : Card(
+            child: Column(
+              children: [
+                ListTile(
+                  leading: Image.network(userDetail.avatar ?? "https://cdn2.iconfinder.com/data/icons/delivery-and-logistic/64/Not_found_the_recipient-no_found-person-user-search-searching-4-512.png",
+                    width: 90,
+                    height: 90,
+                  ),
+                  title: Text(userDetail.name) ?? Text(""),
+                  subtitle: Text(
+                    userDetail.email,
+                    style: TextStyle(color: Colors.black.withOpacity(0.6)) ?? Text(""),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Hidup seperti air yang mengalir.',
+                    style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                  ),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Hidup seperti air yang mengalir.',
-                style: TextStyle(color: Colors.black.withOpacity(0.6)),
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       );
     } else {
       return Card(
-        clipBehavior: Clip.antiAlias,
         child: Column(
           children: [
             ListTile(
