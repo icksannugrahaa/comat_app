@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Wrapper extends StatelessWidget {
-
+  
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
@@ -131,7 +131,7 @@ class _UserAccDrawer extends StatelessWidget {
     return UserAccountsDrawerHeader(
       decoration: BoxDecoration(
           image: new DecorationImage(
-            image: AssetImage("images/bg_purple_mat.jpg"),
+            image: AssetImage("assets/images/bg_purple_mat.jpg"),
             fit: BoxFit.cover,
           ),
       ),

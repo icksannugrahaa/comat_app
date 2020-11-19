@@ -10,9 +10,10 @@ import 'package:provider/provider.dart';
 import 'package:comat_apps/services/database.dart';
 
 class Home extends StatelessWidget {
-  Home({Key key, this.title, this.drawer}) : super(key: key);
+  Home({Key key, this.title, this.drawer, this.splashscreen}) : super(key: key);
   final String title;
   final Widget drawer;
+  final bool splashscreen;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override

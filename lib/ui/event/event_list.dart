@@ -45,11 +45,16 @@ class EventTile extends StatelessWidget {
             radius: 25,
             backgroundImage: NetworkImage(event.image),
           ),
-          title: Text(event.title, overflow: TextOverflow.ellipsis),
+          title: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Text(event.title, overflow: TextOverflow.ellipsis),
+          ),
           subtitle: Column(
             children: [
-              Padding(padding: EdgeInsets.only(top: 10),),
-              Text(event.description, overflow: TextOverflow.ellipsis),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(event.description, overflow: TextOverflow.ellipsis),
+              ),
               Row(
                 children: [
                   Chip(
