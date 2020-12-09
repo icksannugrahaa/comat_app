@@ -37,7 +37,7 @@ class HomeBody extends StatelessWidget {
   Widget build(BuildContext context) {
     // final user = Provider.of<User>(context);
     var menu = [
-      {"image": "assets/images/events.png", "title": "Search Event", "route": "/under-construction"},
+      {"image": "assets/images/events.png", "title": "Search Event", "route": "/event-search"},
       {"image": "assets/images/newevent.png", "title": "Make Your Event", "route": "/under-construction"},
       {"image": "assets/images/history.png", "title": "History Event", "route": "/under-construction"},
     ];
@@ -56,48 +56,41 @@ class HomeBody extends StatelessWidget {
             online: false,
             scaffoldKey: scaffoldKey,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 145,
-                width: MediaQuery.of(context).size.width,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  primary: false,
-                  itemCount: menu == null ? 0.0 : menu.length,
-                  itemBuilder: (BuildContext context, int i) {
-                    return FeatureList(image: menu[i]['image'], title: menu[i]['title'], route: menu[i]['route'],);
-                  },
-                ),
-              ),
-              SizedBox(height: 20,),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  children: [
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "Event Update",
-                            style: kTitleTextStyle,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Spacer(),
-                    Text("See More", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600),),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20,),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: EventList(),
-              )
-            ],
+          Container(
+            height: 200,
+            width: double.infinity,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              primary: false,
+              itemCount: menu == null ? 0.0 : menu.length,
+              itemBuilder: (BuildContext context, int i) {
+                return FeatureList(image: menu[i]['image'], title: menu[i]['title'], route: menu[i]['route'],);
+              },
+            ),
           ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "Event Update",
+                        style: kTitleTextStyle,
+                      ),
+                    ],
+                  ),
+                ),
+                Spacer(),
+                InkWell(
+                  onTap: () => Navigator.pushNamed(context, "/event-search"),
+                  child: Text("See More", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600),)
+                ),
+              ],
+            ),
+          ),
+          EventList(limit: 4,),
         ],
       ),
     );
@@ -109,6 +102,68 @@ class FeatureList extends StatelessWidget {
   final String image;
   final String route;
   const FeatureList({
+    Key key, this.image, this.title, this.route
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(15),
+      child: Stack(
+        children: [
+          Stack(
+            children: [
+              Container(
+                height: 140,
+                width: 120,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(borderRadius),
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.white, Colors.white
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      blurRadius: 12,
+                      offset: Offset(0,1)
+                    )
+                  ]
+                ),
+                child: Material(
+                  borderRadius: BorderRadius.circular(borderRadius),
+                  child: InkWell(
+                    onTap: () => Navigator.pushNamed(context, route),
+                    borderRadius: BorderRadius.circular(borderRadius),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Image.asset(image, height: 90, width: 90,),
+                Padding(padding: EdgeInsets.only(top: 10),),
+                Text(title, style: TextStyle(fontWeight: FontWeight.bold),)
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+class FeatureLists extends StatelessWidget {
+  final String title;
+  final String image;
+  final String route;
+  const FeatureLists({
     Key key, this.image, this.title, this.route
   }) : super(key: key);
 

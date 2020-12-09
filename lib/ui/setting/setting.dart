@@ -3,6 +3,7 @@ import 'package:comat_apps/models/user.dart';
 import 'package:comat_apps/models/user_detail.dart';
 import 'package:comat_apps/services/auth.dart';
 import 'package:comat_apps/databases/database.dart';
+import 'package:comat_apps/ui/custom_widget/my_appbar.dart';
 import 'package:comat_apps/ui/custom_widget/my_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -35,19 +36,7 @@ class _SettingState extends State<Setting> {
     
     if(user != null) {
       return loading ? Loading() : Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          elevation: 1,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.keyboard_backspace,
-              color: Colors.blue[400],
-            ),
-          ),
-        ),
+        appBar: MyAppBar(),
         body: StreamBuilder<UserDetail>(
           stream: DatabaseServiceUsers(uid: user.uid).userData,
           builder: (context, snapshot) {

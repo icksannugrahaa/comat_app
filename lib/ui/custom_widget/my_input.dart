@@ -37,10 +37,10 @@ class _NormalInputState extends State<NormalInput> {
         enabled: widget.enable,
         validator: (value) {
           if(value.isEmpty) {
-            return "Tolong input ${widget.label}";
+            return "Please input ${widget.label}";
           } else {
             if(widget.hint == "Email" && !RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$").hasMatch(value)) {
-              return "Email tidak valid";
+              return "Invalid Email !";
             } else {
               return null;
             }

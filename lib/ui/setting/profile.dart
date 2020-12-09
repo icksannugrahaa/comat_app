@@ -5,6 +5,7 @@ import 'package:comat_apps/models/user.dart';
 import 'package:comat_apps/models/user_detail.dart';
 import 'package:comat_apps/databases/database.dart';
 import 'package:comat_apps/services/upload_file.dart';
+import 'package:comat_apps/ui/custom_widget/my_appbar.dart';
 import 'package:comat_apps/ui/custom_widget/my_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -35,19 +36,7 @@ class _SettingProfileState extends State<SettingProfile> {
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     return loading ? Loading() : Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 1,
-        leading: IconButton(
-          icon: Icon(
-            Icons.keyboard_backspace,
-            color: Colors.blue[400],
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        )
-      ),
+      appBar: MyAppBar(),
       body: StreamBuilder<UserDetail>(
         stream: DatabaseServiceUsers(uid: user.uid).userData,
         builder: (context, snapshot) {

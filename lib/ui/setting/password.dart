@@ -1,6 +1,7 @@
 import 'package:comat_apps/databases/db_users.dart';
 import 'package:comat_apps/models/user.dart';
 import 'package:comat_apps/models/user_detail.dart';
+import 'package:comat_apps/ui/custom_widget/my_appbar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:comat_apps/services/auth.dart';
@@ -36,19 +37,7 @@ class _SettingPasswordState extends State<SettingPassword> {
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     return loading == true ? Loading() : Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 1,
-        leading: IconButton(
-          icon: Icon(
-            Icons.keyboard_backspace,
-            color: Colors.blue[400],
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        )
-      ),
+      appBar: MyAppBar(),
       body: StreamBuilder<UserDetail>(
         stream: DatabaseServiceUsers(uid: user.uid).userData,
         builder: (context, snapshot) {

@@ -322,7 +322,7 @@ class _LoginPageState extends State<LoginPage> {
                               color: Colors.blue[400],
                               padding: EdgeInsets.symmetric(horizontal: 44),
                               child: Text(
-                                "Login",
+                                "Sign in",
                                 style: TextStyle(
                                   fontSize: 14,
                                   letterSpacing: 2.2,
@@ -338,7 +338,7 @@ class _LoginPageState extends State<LoginPage> {
                                 });
                               },
                               child: Text(
-                                "Register",
+                                "Sign up",
                                 style: TextStyle(
                                   fontSize: 14,
                                   letterSpacing: 2.2,
@@ -436,7 +436,7 @@ class _LoginPageState extends State<LoginPage> {
                               color: Colors.blue[400],
                               padding: EdgeInsets.symmetric(horizontal: 30),
                               child: Text(
-                                "Register",
+                                "Sign up",
                                 style: TextStyle(
                                   fontSize: 14,
                                   letterSpacing: 2.2,
@@ -452,7 +452,7 @@ class _LoginPageState extends State<LoginPage> {
                                 });
                               },
                               child: Text(
-                                "Login",
+                                "Sign in",
                                 style: TextStyle(
                                   fontSize: 14,
                                   letterSpacing: 2.2,
