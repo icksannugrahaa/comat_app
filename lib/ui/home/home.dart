@@ -1,13 +1,10 @@
-// import 'package:comat_apps/models/user.dart';
+import 'package:comat_apps/databases/db_events.dart';
 import 'package:comat_apps/models/event.dart';
-import 'package:comat_apps/models/user.dart';
-import 'package:comat_apps/models/user_detail.dart';
-import 'package:comat_apps/ui/custom_widget/float_btn.dart';
+import 'package:comat_apps/ui/constant.dart';
 import 'package:comat_apps/ui/event/event_list.dart';
-import 'package:comat_apps/ui/home/user_list.dart';
+import 'package:comat_apps/ui/layout/header.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:comat_apps/services/database.dart';
 
 class Home extends StatelessWidget {
   Home({Key key, this.title, this.drawer, this.splashscreen}) : super(key: key);
@@ -19,115 +16,129 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<Event>>.value(
-          value: DatabaseService().events,
-          catchError: (context, error) {
-            print(error);
-          },
-          child: Scaffold(
+      value: DatabaseServiceEvents().events,
+      child: Scaffold(
           key: _scaffoldKey,
-          appBar: AppBar(
-            title: Text(title),
-            leading: IconButton(
-              icon: Icon(Icons.apps),
-              onPressed: () => _scaffoldKey.currentState.openDrawer(),
-            ),
-          ),
-          body: HomeBody(),
+          body: HomeBody(scaffoldKey: _scaffoldKey,),
           drawer: drawer,
-          floatingActionButton: FancyFab(icon: Icons.add, tooltip: 'Open Menu',),
+          // floatingActionButton: FancyFab(icon: Icons.add, tooltip: 'Open Menu',),
       ),
     );
   }
 }
 
 class HomeBody extends StatelessWidget {
+  final scaffoldKey;
+  const HomeBody({
+    this.scaffoldKey
+  });
+
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
+    // final user = Provider.of<User>(context);
+    var menu = [
+      {"image": "assets/images/events.png", "title": "Search Event", "route": "/under-construction"},
+      {"image": "assets/images/newevent.png", "title": "Make Your Event", "route": "/under-construction"},
+      {"image": "assets/images/history.png", "title": "History Event", "route": "/under-construction"},
+    ];
     return SingleChildScrollView(
-      physics: ScrollPhysics(),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _loginCard(user),
-          EventList()
+          Header(
+            decorationImg: 'assets/images/bg_transparent.png',
+            imageWidth: 300,
+            textOrImg: false,
+            textSize: 0,
+            titleImage: "assets/images/bg_user.png",
+            titleText: "",
+            icon: Icons.menu,
+            online: false,
+            scaffoldKey: scaffoldKey,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 145,
+                width: MediaQuery.of(context).size.width,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  primary: false,
+                  itemCount: menu == null ? 0.0 : menu.length,
+                  itemBuilder: (BuildContext context, int i) {
+                    return FeatureList(image: menu[i]['image'], title: menu[i]['title'], route: menu[i]['route'],);
+                  },
+                ),
+              ),
+              SizedBox(height: 20,),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Event Update",
+                            style: kTitleTextStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Spacer(),
+                    Text("See More", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600),),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20,),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: EventList(),
+              )
+            ],
+          ),
         ],
       ),
     );
   }
-
-  _loginCard(User user) {
-    if(user != null) {
-      return StreamBuilder<UserDetail>(
-        stream: DatabaseService(uid: user.uid).userData,
-        builder: (context, snapshot) {
-          UserDetail userDetail = snapshot.data;
-          return userDetail == null ? Center(child: CircularProgressIndicator()) : Card(
-            child: Column(
-              children: [
-                ListTile(
-                  leading: Image.network(userDetail.avatar ?? "https://cdn2.iconfinder.com/data/icons/delivery-and-logistic/64/Not_found_the_recipient-no_found-person-user-search-searching-4-512.png",
-                    width: 90,
-                    height: 90,
-                  ),
-                  title: Text(userDetail.name) ?? Text(""),
-                  subtitle: Text(
-                    userDetail.email,
-                    style: TextStyle(color: Colors.black.withOpacity(0.6)) ?? Text(""),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    'Hidup seperti air yang mengalir.',
-                    style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      );
-    } else {
-      return Card(
-        child: Column(
-          children: [
-            ListTile(
-              title: const Text('Selamat Datang diaplikasi comat !'),
-            )
-          ],
-        ),
-      );
-    }
-  }
 }
 
-class _MenuContent extends StatelessWidget {
-  _MenuContent({this.text, this.textSize, this.icon, this.iconSize, this.color});
-  final String text;
-  final double textSize;
-  final IconData icon;
-  final double iconSize;
-  final Color color;
+class FeatureList extends StatelessWidget {
+  final String title;
+  final String image;
+  final String route;
+  const FeatureList({
+    Key key, this.image, this.title, this.route
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.all(10.0),
-      child: InkWell(
+    return Padding(
+      padding: const EdgeInsets.only(right: 10, left: 10),
+      child: InkWell( 
         onTap: () {
-          // database.reference().child("message").set({
-          //   "action" : "Clicked",
-          //   "status" : "true",
-          //   "aye": "aye"
-          // });
+          Navigator.pushNamed(context, route);
         },
-        splashColor: Colors.grey,
-        child: Center(
+        borderRadius: BorderRadius.circular(15),
+        child: Container(
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: Colors.white.withOpacity(0.8),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(0, 10),
+                blurRadius: 20,
+                color: kActiveShadowColor
+              )
+            ]
+          ),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon, size: iconSize, color: color),
-              Text(text, style: TextStyle(fontSize: textSize))
+              Image.asset(image, height: 90, width: 90,),
+              Padding(padding: EdgeInsets.only(top: 10),),
+              Text(title, style: TextStyle(fontWeight: FontWeight.bold),)
             ],
           ),
         ),

@@ -1,11 +1,8 @@
+import 'package:comat_apps/databases/db_users.dart';
 import 'package:comat_apps/models/user.dart';
 import 'package:comat_apps/models/user_detail.dart';
-import 'package:comat_apps/services/auth.dart';
-import 'package:comat_apps/services/database.dart';
-import 'package:comat_apps/ui/about/about.dart';
-import 'package:comat_apps/ui/authentication/authenticate.dart';
+import 'package:comat_apps/databases/database.dart';
 import 'package:comat_apps/ui/home/home.dart';
-import 'package:comat_apps/ui/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,16 +11,10 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    // if(user == null) {
-    //   return Authenticate();
-    // } else {
-      return Home(title: "Comat App", drawer: _drawerMenu(context, user),);
-    // }
-    // return user != null ? Home() : Authenticate();
+    return Home(title: "Comat App", drawer: _drawerMenu(context, user),);
   }
 
   _drawerMenu (BuildContext context, final user) {
-    final AuthService _auth = AuthService();
 
     if(user == null) {
         return Drawer(
@@ -40,17 +31,22 @@ class Wrapper extends StatelessWidget {
                 ListTile(
                   leading: Icon(Icons.vpn_key),
                   title: Text("Sign In"),
-                  onTap: () async {
-                    final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => Authenticate()));
-                    print(result);
-                    print("suceess login");
+                  onTap: () {
+                    Navigator.pushNamed(context, '/login');
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.settings),
+                  title: Text("Setting"),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/setting');
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.info_outline),
                   title: Text("About"),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => About()));
+                    Navigator.pushNamed(context, '/about');
                   },
                 ),
               ]
@@ -59,7 +55,7 @@ class Wrapper extends StatelessWidget {
         );
       } else {
         return StreamBuilder<UserDetail>(
-          stream: DatabaseService(uid: user.uid).userData,
+          stream: DatabaseServiceUsers(uid: user.uid).userData,
           builder: (context, snapshot) {
             UserDetail userDetail = snapshot.data;
             return userDetail == null ? Center(child: CircularProgressIndicator()) : Drawer(
@@ -75,26 +71,19 @@ class Wrapper extends StatelessWidget {
                       },
                     ),
                     ListTile(
-                      leading: Icon(Icons.account_circle),
-                      title: Text("Profile"),
+                      leading: Icon(Icons.settings),
+                      title: Text("Setting"),
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()));
+                        Navigator.pushNamed(context, '/setting');
                       },
                     ),
                     ListTile(
                       leading: Icon(Icons.info_outline),
                       title: Text("About"),
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => About()));
+                        Navigator.pushNamed(context, '/about');
                       },
                     ),
-                    ListTile(
-                      leading: Icon(Icons.exit_to_app),
-                      title: Text("Sign Out"),
-                      onTap: () async {
-                        await _auth.signOut();
-                      },
-                    )
                   ]
                 ),
               ),
@@ -105,22 +94,22 @@ class Wrapper extends StatelessWidget {
   }
 }
 
-class _ListTile extends StatelessWidget {
-  _ListTile({this.icon, this.title});
+// class _ListTile extends StatelessWidget {
+//   _ListTile({this.icon, this.title});
 
-  final IconData icon;
-  final String title;
+//   final IconData icon;
+//   final String title;
 
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(title),
-      onTap: () {
-      }
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return ListTile(
+//       leading: Icon(icon),
+//       title: Text(title),
+//       onTap: () {
+//       }
+//     );
+//   }
+// }
 
 class _UserAccDrawer extends StatelessWidget {
   _UserAccDrawer({this.name, this.email, this.photoURL});

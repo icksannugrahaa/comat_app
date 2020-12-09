@@ -27,7 +27,15 @@ class _ProfileState extends State<Profile>
       appBar: AppBar(
         title: Text("Profile"),
       ),
-      body: Center(child: Text("Profile")),
+      body: Center(
+        child: Column(
+          children: [
+            Image.asset("assets/images/under_construction.png"),
+            SizedBox(height: 20,),
+            Text("Under Development", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),)
+          ],
+        )
+      ),
     );
   }
 }

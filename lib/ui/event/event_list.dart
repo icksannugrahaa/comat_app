@@ -1,7 +1,10 @@
 import 'package:comat_apps/models/event.dart';
+import 'package:comat_apps/ui/event/event_argument.dart';
+import 'package:comat_apps/ui/event/event_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:indonesia/indonesia.dart';
+import 'package:comat_apps/ui/constant.dart';
 
 class EventList extends StatefulWidget {
   @override
@@ -18,16 +21,22 @@ class _EventListState extends State<EventList> {
       shrinkWrap: true,
       itemCount: events.length ?? 1,
       itemBuilder: (context, index) {
-        return EventTile(event: events[index]);
+        if(index < 4) {
+          return EventTile(event: events[index]);
+        } else {
+          return Container();
+        }
       },
     );
-    
   }
 }
 
 class EventTile extends StatelessWidget {
+  const EventTile({
+    Key key, this.event
+  }) : super(key: key);
+
   final Event event;
-  EventTile({this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -36,46 +45,89 @@ class EventTile extends StatelessWidget {
     final difference = date.difference(date2).inDays;
     final percentace = (event.remains * 100) / event.limit;
 
-    return Padding(
-      padding: EdgeInsets.only(top: 8),
-      child: Card(
-        margin: EdgeInsets.fromLTRB(20, 6, 20, 0),
-        child: ListTile(
-          leading: CircleAvatar(
-            radius: 25,
-            backgroundImage: NetworkImage(event.image),
-          ),
-          title: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Text(event.title, overflow: TextOverflow.ellipsis),
-          ),
-          subtitle: Column(
+    return ClipRect(
+      child: Banner(
+        message: "${event.remains} slot",
+        location: BannerLocation.topEnd,
+        textStyle: TextStyle(fontSize: 10),
+        color: percentace >= 70 ? Colors.green : percentace >= 30 ? Colors.orange[300] : Colors.red,
+        child: SizedBox(
+          height: 156,
+          child: Stack(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Text(event.description, overflow: TextOverflow.ellipsis),
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    EventDetail.routeName,
+                    arguments: EventArguments(event),
+                  );
+                },
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  height: 136,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white.withOpacity(0.8),
+                    boxShadow: [
+                      BoxShadow(
+                        offset: Offset(0, 8),
+                        blurRadius: 24,
+                        color: kShadowColor
+                      )
+                    ]
+                  ),
+                ),
               ),
-              Row(
-                children: [
-                  Chip(
-                    avatar: CircleAvatar(
-                      backgroundColor: difference >= 7 ? Colors.green : difference >= 5 ? Colors.orange[300] : Colors.red,
-                      child: Icon(Icons.access_time, size: 14, color: Colors.white,),
-                    ),
-                    label: Text(tanggal(date),style: TextStyle(fontSize: 10),),
+              Image.network(event.image, height: 120, width: 140,),
+              Positioned(
+                left: 130,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  height: 136,
+                  width: MediaQuery.of(context).size.width - 170,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        event.title, 
+                        style: kTitleTextStyle.copyWith(
+                          fontSize: 16
+                        ),
+                        overflow: TextOverflow.ellipsis
+                      ),
+                      Flexible(
+                        child: Text(
+                          event.description,
+                          style: TextStyle(
+                            fontSize: 12
+                          ),
+                          overflow: TextOverflow.ellipsis
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Chip(
+                            avatar: CircleAvatar(
+                              backgroundColor: difference >= 7 ? Colors.green : difference >= 5 ? Colors.orange[300] : Colors.red,
+                              child: Icon(Icons.access_time, size: 14, color: Colors.white,),
+                            ),
+                            label: Text(tanggal(date),style: TextStyle(fontSize: 10),),
+                          ),
+                        ],
+                      ),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: Icon(Icons.chevron_right),
+                      ),
+                    ],
                   ),
-                  Chip(
-                    avatar: CircleAvatar(
-                      backgroundColor: percentace >= 70 ? Colors.green : percentace >= 30 ? Colors.orange[300] : Colors.red,
-                      child: percentace > 0 ? Icon(Icons.event_available, size: 14, color: Colors.white,) : Icon(Icons.event_busy, size: 14, color: Colors.white,),
-                    ),
-                    label: Text("${event.remains}",style: TextStyle(fontSize: 10),),
-                  ),
-                ],
+                ),
               )
             ],
           ),
-          onTap: () {},
         ),
       ),
     );

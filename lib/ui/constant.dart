@@ -26,3 +26,13 @@ const kTitleTextStyle = TextStyle(
 
 // Text
 const titleApp = "Comat App";
+
+const headerStyle = TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold);
+const titleStyle = TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold);
+const subtitleStyle = TextStyle(color: Colors.grey, fontSize: 14);
+const monthStyle = TextStyle(color: Colors.orange, fontSize: 16, fontWeight: FontWeight.w500);
+
+const Color lime = Color.fromRGBO(240, 203, 148, 1);
+const Color orange = Color.fromRGBO(255, 158, 107, 1);
+const Color primaryLight = Color.fromRGBO(240, 234, 248, 1);
+const Color imgBG = Color.fromRGBO(230, 230, 254, 1);
