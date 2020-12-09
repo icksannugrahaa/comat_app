@@ -1,0 +1,10 @@
+class UserDetail {
+  final String uid;
+  final String name;
+  final String avatar;
+  final String email;
+  final String phone;
+  final bool gSignIn;
+
+  UserDetail({this.uid, this.name, this.avatar, this.email, this.phone, this.gSignIn});
+}
