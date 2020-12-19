@@ -1,7 +1,6 @@
 import 'package:comat_apps/databases/db_users.dart';
 import 'package:comat_apps/models/user.dart';
 import 'package:comat_apps/models/user_detail.dart';
-import 'package:comat_apps/databases/database.dart';
 import 'package:comat_apps/ui/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +10,7 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    return Home(title: "Comat App", drawer: _drawerMenu(context, user),);
+    return Home(title: "Comat App", drawer: _drawerMenu(context, user), user: user,);
   }
 
   _drawerMenu (BuildContext context, final user) {

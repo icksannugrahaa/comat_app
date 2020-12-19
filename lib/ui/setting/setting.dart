@@ -2,7 +2,6 @@ import 'package:comat_apps/databases/db_users.dart';
 import 'package:comat_apps/models/user.dart';
 import 'package:comat_apps/models/user_detail.dart';
 import 'package:comat_apps/services/auth.dart';
-import 'package:comat_apps/databases/database.dart';
 import 'package:comat_apps/ui/custom_widget/my_appbar.dart';
 import 'package:comat_apps/ui/custom_widget/my_loading.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +79,7 @@ class _SettingState extends State<Setting> {
                           SizedBox(
                             height: 10,
                           ),
-                          SettingAccountTile(route: "/change-password", title: "Change Password",),
+                          SettingAccountTile(route: "/reset-password", title: "Reset Password",),
                           SettingAccountTile(route: "/profile", title: "Edit Profile",),
                           SizedBox(
                             height: 40,

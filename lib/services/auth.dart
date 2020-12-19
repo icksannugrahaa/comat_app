@@ -1,7 +1,6 @@
 import 'package:comat_apps/databases/db_users.dart';
 import 'package:comat_apps/helpers/my_helpers.dart';
 import 'package:comat_apps/models/user.dart' as um;
-import 'package:comat_apps/databases/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 

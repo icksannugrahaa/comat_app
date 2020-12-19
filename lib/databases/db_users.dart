@@ -32,6 +32,7 @@ class DatabaseServiceUsers extends DatabaseService {
   List<UserDetail> _userListFromSnapshot(QuerySnapshot qs) {
     return qs.docs.map((doc){
       return UserDetail(
+        uid: doc.reference.id,
         name: doc.get('name') ?? '',
         avatar: doc.get('avatar') ?? '',
         phone: doc.get('phone') ?? '',

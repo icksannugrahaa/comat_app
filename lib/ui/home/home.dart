@@ -7,21 +7,21 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
-  Home({Key key, this.title, this.drawer, this.splashscreen}) : super(key: key);
+  Home({Key key, this.title, this.drawer, this.splashscreen, this.user}) : super(key: key);
   final String title;
   final Widget drawer;
   final bool splashscreen;
+  final user;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<Event>>.value(
-      value: DatabaseServiceEvents().events,
+      value: DatabaseServiceEvents().events('','',''),
       child: Scaffold(
           key: _scaffoldKey,
-          body: HomeBody(scaffoldKey: _scaffoldKey,),
+          body: HomeBody(scaffoldKey: _scaffoldKey,user: user,),
           drawer: drawer,
-          // floatingActionButton: FancyFab(icon: Icons.add, tooltip: 'Open Menu',),
       ),
     );
   }
@@ -29,18 +29,20 @@ class Home extends StatelessWidget {
 
 class HomeBody extends StatelessWidget {
   final scaffoldKey;
+  final user;
   const HomeBody({
-    this.scaffoldKey
+    this.scaffoldKey, this.user
   });
 
   @override
   Widget build(BuildContext context) {
-    // final user = Provider.of<User>(context);
     var menu = [
       {"image": "assets/images/events.png", "title": "Search Event", "route": "/event-search"},
-      {"image": "assets/images/newevent.png", "title": "Make Your Event", "route": "/under-construction"},
-      {"image": "assets/images/history.png", "title": "History Event", "route": "/under-construction"},
     ];
+    if(user != null) {
+      menu.add({"image": "assets/images/newevent.png", "title": "Make Your Event", "route": "/event-manage"});
+      menu.add({"image": "assets/images/history.png", "title": "History Event", "route": "/under-construction"});
+    }
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +59,7 @@ class HomeBody extends StatelessWidget {
             scaffoldKey: scaffoldKey,
           ),
           Container(
-            height: 200,
+            height: 180,
             width: double.infinity,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -76,7 +78,7 @@ class HomeBody extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: "Event Update",
+                        text: "The Closest Time Event",
                         style: kTitleTextStyle,
                       ),
                     ],
@@ -144,59 +146,17 @@ class FeatureList extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.only(right: 15,left: 15, bottom:15),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Image.asset(image, height: 90, width: 90,),
-                Padding(padding: EdgeInsets.only(top: 10),),
+                Padding(padding: EdgeInsets.only(top: 15),),
                 Text(title, style: TextStyle(fontWeight: FontWeight.bold),)
               ],
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-class FeatureLists extends StatelessWidget {
-  final String title;
-  final String image;
-  final String route;
-  const FeatureLists({
-    Key key, this.image, this.title, this.route
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 10, left: 10),
-      child: InkWell( 
-        onTap: () {
-          Navigator.pushNamed(context, route);
-        },
-        borderRadius: BorderRadius.circular(15),
-        child: Container(
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: Colors.white.withOpacity(0.8),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(0, 10),
-                blurRadius: 20,
-                color: kActiveShadowColor
-              )
-            ]
-          ),
-          child: Column(
-            children: [
-              Image.asset(image, height: 90, width: 90,),
-              Padding(padding: EdgeInsets.only(top: 10),),
-              Text(title, style: TextStyle(fontWeight: FontWeight.bold),)
-            ],
-          ),
-        ),
       ),
     );
   }

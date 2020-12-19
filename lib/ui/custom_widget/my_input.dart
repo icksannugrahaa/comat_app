@@ -8,7 +8,7 @@ class NormalInput extends StatefulWidget {
     this.enable,
     this.hint,
     this.inputType,
-    this.controller
+    this.controller,
   }) : super(key: key);
   
   final String label;
@@ -27,16 +27,18 @@ class _NormalInputState extends State<NormalInput> {
 
   @override
   Widget build(BuildContext context) {
+    print("checking ${widget.label}");
     return Padding(
       padding: const EdgeInsets.only(bottom:35.0),
       child: TextFormField(
+        textCapitalization: TextCapitalization.sentences,
         controller: widget.controller,
         obscureText: widget.isPassword ? showPassword : false,
         keyboardType: widget.inputType,
-        // initialValue: widget.value,
         enabled: widget.enable,
+        maxLines: widget.isPassword ? 1 : null,
         validator: (value) {
-          if(value.isEmpty) {
+          if(value.isEmpty || value == "") {
             return "Please input ${widget.label}";
           } else {
             if(widget.hint == "Email" && !RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$").hasMatch(value)) {

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:comat_apps/databases/db_users.dart';
 import 'package:comat_apps/models/user.dart';
 import 'package:comat_apps/models/user_detail.dart';
-import 'package:comat_apps/databases/database.dart';
 import 'package:comat_apps/services/upload_file.dart';
 import 'package:comat_apps/ui/custom_widget/my_appbar.dart';
 import 'package:comat_apps/ui/custom_widget/my_loading.dart';
@@ -18,11 +17,14 @@ class SettingProfile extends StatefulWidget {
 }
 
 class _SettingProfileState extends State<SettingProfile> {
+  bool loading = false;
   UploadService _uploadService = UploadService();
   File _imageFile;
-  final _formKey = GlobalKey<FormState>();
-  bool loading = false;
+  TextEditingController _emailC;
+  TextEditingController _nameC;
+  TextEditingController _phoneC;
   final picker = ImagePicker();
+  final _formKey = GlobalKey<FormState>();
 
   Future pickImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
@@ -41,9 +43,6 @@ class _SettingProfileState extends State<SettingProfile> {
         stream: DatabaseServiceUsers(uid: user.uid).userData,
         builder: (context, snapshot) {
           UserDetail userDetail = snapshot.data;
-          TextEditingController _emailC;
-          TextEditingController _nameC;
-          TextEditingController _phoneC;
           if(userDetail != null) {
             _emailC = TextEditingController(text: userDetail.email);
             _nameC = TextEditingController(text: userDetail.name);
@@ -145,8 +144,7 @@ class _SettingProfileState extends State<SettingProfile> {
                           onPressed: () async{
                             setState(() => loading = true );
                             if(_formKey.currentState.validate()) {
-                              dynamic _url = await _uploadService.uploadImageToFirebase(context, _imageFile);
-                              print(_url);
+                              dynamic _url = await _uploadService.uploadImageToFirebase(context, _imageFile, "/uploads/images/users");
                               if(_url != "") {
                                 await DatabaseServiceUsers(uid: user.uid).updateUser(
                                   _nameC.text ?? userDetail.name,

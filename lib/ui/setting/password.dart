@@ -3,7 +3,6 @@ import 'package:comat_apps/models/user.dart';
 import 'package:comat_apps/models/user_detail.dart';
 import 'package:comat_apps/ui/custom_widget/my_appbar.dart';
 import 'package:flutter/material.dart';
-
 import 'package:comat_apps/services/auth.dart';
 import 'package:comat_apps/ui/custom_widget/my_loading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -105,6 +104,8 @@ class _SettingPasswordState extends State<SettingPassword> {
                 ),
               ),
             );
+          } else {
+            return Container();
           }
         }
       ),
