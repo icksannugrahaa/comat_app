@@ -30,16 +30,16 @@ class _UnderConstructionState extends State<UnderConstruction> {
               padding: EdgeInsets.only(left: 16, top: 25, right: 16),
               child: Column(
                 children: [
+                  Image.asset("assets/images/under_construction.png"),
+                  SizedBox(height: 30,),
                   Center(
                     child: Text(
-                      "Under Development",
+                      "Dalam tahap pembangunan",
                       style: TextStyle(
                         fontSize: 25, fontWeight: FontWeight.bold
                       ),
                     ),
                   ),
-                  Image.asset("assets/images/under_construction.png"),
-                  SizedBox(height: 20,),
                 ],
               ),
             ),

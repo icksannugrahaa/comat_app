@@ -40,3 +40,12 @@ const Color imgBG = Color.fromRGBO(230, 230, 254, 1);
 // mystyle
 const double borderRadius = 15;
 final Color bodyColor = Colors.grey[50];
+
+// Category
+var category = [
+  {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "All"},
+  {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Band", "key": "type", "where":"isEqualTo", "value": "Music"},
+  {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Seminar", "key": "type", "value": "Seminar", "where":"isEqualTo"},
+  {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Webinar", "key": "type", "value": "Webinar", "where":"isEqualTo"},
+  {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Workshop", "key": "type", "value": "Workshop", "where":"isEqualTo"},
+];

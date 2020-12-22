@@ -1,12 +1,16 @@
+// System
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+// My Package
 import 'package:comat_apps/databases/db_users.dart';
 import 'package:comat_apps/models/user.dart';
 import 'package:comat_apps/models/user_detail.dart';
 import 'package:comat_apps/services/auth.dart';
 import 'package:comat_apps/ui/custom_widget/my_appbar.dart';
 import 'package:comat_apps/ui/custom_widget/my_loading.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
+import 'package:comat_apps/ui/custom_widget/my_toast.dart';
+
 
 class Setting extends StatefulWidget {
   @override
@@ -17,25 +21,13 @@ class _SettingState extends State<Setting> {
   final AuthService _auth = AuthService();
   bool loading = false;
   
-  _showToast(String text, Color bgcolor) {
-    return Fluttertoast.showToast(
-        msg: text,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: bgcolor,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
-  }
-  
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     
     if(user != null) {
       return loading ? Loading() : Scaffold(
-        appBar: MyAppBar(),
+        appBar: MyAppBar(isSearchAble: false,),
         body: StreamBuilder<UserDetail>(
           stream: DatabaseServiceUsers(uid: user.uid).userData,
           builder: (context, snapshot) {
@@ -51,7 +43,7 @@ class _SettingState extends State<Setting> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Settings",
+                            "Pengaturan",
                             style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                           ),
                           SizedBox(
@@ -67,7 +59,7 @@ class _SettingState extends State<Setting> {
                                 width: 8,
                               ),
                               Text(
-                                "Account",
+                                "Akun",
                                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                             ],
@@ -80,7 +72,7 @@ class _SettingState extends State<Setting> {
                             height: 10,
                           ),
                           SettingAccountTile(route: "/reset-password", title: "Reset Password",),
-                          SettingAccountTile(route: "/profile", title: "Edit Profile",),
+                          SettingAccountTile(route: "/profile", title: "Ubah Profile",),
                           SizedBox(
                             height: 40,
                           ),
@@ -94,7 +86,7 @@ class _SettingState extends State<Setting> {
                                 width: 8,
                               ),
                               Text(
-                                "Notifications",
+                                "Notifikasi",
                                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                             ],
@@ -106,7 +98,7 @@ class _SettingState extends State<Setting> {
                           SizedBox(
                             height: 10,
                           ),
-                          buildNotificationOptionRow("Event Remainder", true),
+                          buildNotificationOptionRow("Pengingat Event", true),
                           SizedBox(
                             height: 50,
                           ),
@@ -118,7 +110,7 @@ class _SettingState extends State<Setting> {
                               ),
                               onPressed: () async {
                                 await _auth.signOut();
-                                _showToast("Logout successfully !", Colors.green);
+                                myToast("Logout berhasil !", Colors.green);
                                 Navigator.pushReplacementNamed(context, "/home");
                               },
                               child: Text(
@@ -144,7 +136,7 @@ class _SettingState extends State<Setting> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Settings",
+                            "Pengaturan",
                             style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                           ),
                           SizedBox(
@@ -160,7 +152,7 @@ class _SettingState extends State<Setting> {
                                 width: 8,
                               ),
                               Text(
-                                "Notifications",
+                                "Notifikasi",
                                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                             ],
@@ -172,7 +164,7 @@ class _SettingState extends State<Setting> {
                           SizedBox(
                             height: 10,
                           ),
-                          buildNotificationOptionRow("Event Remainder", true),
+                          buildNotificationOptionRow("Pengingat Event", true),
                           SizedBox(
                             height: 50,
                           ),
@@ -184,7 +176,7 @@ class _SettingState extends State<Setting> {
                               ),
                               onPressed: () async {
                                 await _auth.signOut();
-                                _showToast("Logout successfully !", Colors.green);
+                                myToast("Logout berhasil !", Colors.green);
                                 Navigator.pushReplacementNamed(context, "/home");
                               },
                               child: Text(
@@ -228,7 +220,7 @@ class _SettingState extends State<Setting> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Settings",
+                      "Pengaturan",
                       style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                     ),
                     SizedBox(
@@ -244,7 +236,7 @@ class _SettingState extends State<Setting> {
                           width: 8,
                         ),
                         Text(
-                          "Notifications",
+                          "Notifikasi",
                           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -256,7 +248,7 @@ class _SettingState extends State<Setting> {
                     SizedBox(
                       height: 10,
                     ),
-                    buildNotificationOptionRow("Event Remainder", true),
+                    buildNotificationOptionRow("Pengingat Event", true),
                   ], 
                 ),
               )

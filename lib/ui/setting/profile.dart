@@ -1,14 +1,17 @@
+// System
 import 'dart:io';
+import 'package:comat_apps/ui/custom_widget/my_imagepicker.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
+// My Package
 import 'package:comat_apps/databases/db_users.dart';
 import 'package:comat_apps/models/user.dart';
 import 'package:comat_apps/models/user_detail.dart';
 import 'package:comat_apps/services/upload_file.dart';
 import 'package:comat_apps/ui/custom_widget/my_appbar.dart';
 import 'package:comat_apps/ui/custom_widget/my_loading.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:comat_apps/ui/custom_widget/my_input.dart'; 
 
 class SettingProfile extends StatefulWidget {
@@ -23,14 +26,17 @@ class _SettingProfileState extends State<SettingProfile> {
   TextEditingController _emailC;
   TextEditingController _nameC;
   TextEditingController _phoneC;
+  String _errorImage = " ";
   final picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
 
-  Future pickImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
-
+  setImageState(PickedFile _pickedFile) {
     setState(() {
-      _imageFile = File(pickedFile.path);
+      if (_pickedFile != null) {
+        _imageFile = File(_pickedFile.path);
+      } else {
+        _errorImage = "Tidak ada gambar yang dipilih !";
+      }
     });
   }
 
@@ -38,7 +44,7 @@ class _SettingProfileState extends State<SettingProfile> {
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     return loading ? Loading() : Scaffold(
-      appBar: MyAppBar(),
+      appBar: MyAppBar(isSearchAble: false,),
       body: StreamBuilder<UserDetail>(
         stream: DatabaseServiceUsers(uid: user.uid).userData,
         builder: (context, snapshot) {
@@ -53,8 +59,8 @@ class _SettingProfileState extends State<SettingProfile> {
             child: Form(
               key: _formKey,
               child: Container(
-                padding: EdgeInsets.only(left: 16, top: 25, right: 16),
                 child: ListView(
+                  padding: EdgeInsets.all(20),
                   children: [
                     Text(
                       "Edit Profile",
@@ -63,64 +69,11 @@ class _SettingProfileState extends State<SettingProfile> {
                       ),
                     ),
                     SizedBox(height: 15,),
-                    Center(
-                      child: Stack(
-                        children: [
-                          Container(
-                            width: 130,
-                            height: 130,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 4,
-                                color: Theme.of(context).scaffoldBackgroundColor
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  spreadRadius: 2, 
-                                  blurRadius: 10,
-                                  color: Colors.black.withOpacity(0.1),
-                                  offset: Offset(0,10)
-                                )
-                              ],
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: _imageFile != null ? FileImage(_imageFile) : NetworkImage(userDetail.avatar),
-                              )
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  width: 4,
-                                  color: Theme.of(context).scaffoldBackgroundColor,
-                                ),
-                                color: Colors.blue[400]
-                              ),
-                              child: FlatButton(
-                                padding: EdgeInsets.only(right: 20, left: 3),
-                                onPressed: pickImage,
-                                child: Icon(
-                                  Icons.edit,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
+                    MyImagePicker(imageF: _imageFile, errorImage: _errorImage, picker: picker, imageN: userDetail.avatar, setImageState: setImageState,isProfile: true,),
                     SizedBox(height: 35,),
                     NormalInput(isPassword: false, label: "Full Name", hint: "Full Name", inputType: TextInputType.text,controller: _nameC,),
-                    NormalInput(isPassword: false, label: "Email", hint: "Email", inputType: TextInputType.emailAddress,controller: _emailC,),
+                    NormalInput(isPassword: false, label: "Email", hint: "Email", inputType: TextInputType.emailAddress,controller: _emailC, enable: false,),
                     NormalInput(isPassword: false, label: "Phonenumber", hint: "+628xxxxxxxx",inputType: TextInputType.number, controller: _phoneC,),
-                    // NormalInput(isPassword: true, label: "Password", value: userDetail.name,), 
                     SizedBox(height: 35,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

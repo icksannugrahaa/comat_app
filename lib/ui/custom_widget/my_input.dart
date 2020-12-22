@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
-
 class NormalInput extends StatefulWidget {
+  final String label;
+  final bool isPassword;
+  final TextInputType inputType;
+  final String hint;
+  final bool enable;
+  final TextEditingController controller;
   NormalInput({
     Key key,
     this.isPassword,
@@ -10,13 +15,6 @@ class NormalInput extends StatefulWidget {
     this.inputType,
     this.controller,
   }) : super(key: key);
-  
-  final String label;
-  final bool isPassword;
-  final TextInputType inputType;
-  final String hint;
-  final bool enable;
-  final TextEditingController controller;
 
   @override
   _NormalInputState createState() => _NormalInputState();
@@ -27,7 +25,6 @@ class _NormalInputState extends State<NormalInput> {
 
   @override
   Widget build(BuildContext context) {
-    print("checking ${widget.label}");
     return Padding(
       padding: const EdgeInsets.only(bottom:35.0),
       child: TextFormField(

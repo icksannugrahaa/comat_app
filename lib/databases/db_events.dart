@@ -9,6 +9,10 @@ class DatabaseServiceEvents extends DatabaseService {
     dataCollection.add(data);
   }
 
+  eventDelete(dynamic eid) async {
+    dataCollection.doc(eid).delete();
+  }
+
   List<Event> _eventListFromSnapshot(QuerySnapshot qs) {
     return qs.docs.map((doc){
       return Event(
@@ -25,6 +29,11 @@ class DatabaseServiceEvents extends DatabaseService {
         limit: doc.get('limit') ?? 0,
         remains: doc.get('remains') ?? 0,
         status: doc.get('status') ?? false,
+        category: doc.get('category') ?? '',
+        obtained: doc.get('obtained') ?? '',
+        organizer: doc.get('organizer') ?? '',
+        price: doc.get('price') ?? 0,
+        rundown: doc.get('rundown') ?? ''
       );
     }).toList();
   }
@@ -132,7 +141,6 @@ class DatabaseServiceEvents extends DatabaseService {
           .snapshots()
           .map(_eventListFromSnapshot);
       }
-      
     } else {
       return dataCollection.orderBy('date', descending: false).snapshots().map(_eventListFromSnapshot);
     }

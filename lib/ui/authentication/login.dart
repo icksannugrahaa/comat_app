@@ -1,11 +1,15 @@
-import 'package:comat_apps/services/auth.dart';
-import 'package:comat_apps/ui/custom_widget/my_input.dart';
-import 'package:comat_apps/ui/custom_widget/my_loading.dart';
+// System
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+// My Package
+import 'package:comat_apps/services/auth.dart';
+import 'package:comat_apps/ui/custom_widget/my_input.dart';
+import 'package:comat_apps/ui/custom_widget/my_loading.dart';
+import 'package:comat_apps/ui/custom_widget/my_toast.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -50,26 +54,13 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
 
-    KeyboardVisibilityNotification().addNewListener(
-      onChange: (bool visible) {
-        setState(() {
-          _keyboardVisible = visible;
-          print("Keyboard State Changed : $visible");
-        });
-      },
-    );
-  }
-
-  _showToast(String text, Color bgcolor) {
-    return Fluttertoast.showToast(
-        msg: text,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: bgcolor,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
+    var keyboardVisibilityController = KeyboardVisibilityController();
+    // Subscribe
+    keyboardVisibilityController.onChange.listen((bool visible) {
+      setState(() {
+        _keyboardVisible = visible;
+      });
+    });
   }
 
   @override
@@ -192,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                               top: _headingTop,
                             ),
                             child: Text(
-                              "Get Started",
+                              "Ayo Mulai",
                               style: TextStyle(
                                 color: _headingColor,
                                 fontSize: 28
@@ -205,7 +196,7 @@ class _LoginPageState extends State<LoginPage> {
                               horizontal: 32
                             ),
                             child: Text(
-                              "We make it very easy for you to know event information. Join us today!.",
+                              "Kami akan membantu anda menemukan informasi seputar event dengan lebih mudah dan cepat. Bergabunglah dengan kami sekarang!.",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: _headingColor,
@@ -245,7 +236,7 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(50)
                         ),
                         child: Center(
-                          child: Text("Next", 
+                          child: Text("Lanjutkan", 
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14
@@ -284,7 +275,7 @@ class _LoginPageState extends State<LoginPage> {
                         Container(
                           margin: EdgeInsets.only(bottom: 20),
                           child: Text(
-                            "Login To Continue",
+                            "Masuk untuk melanjutkan",
                             style: TextStyle(
                                 fontSize: 20
                             ),
@@ -303,26 +294,25 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             RaisedButton(
                               onPressed: () async {
-                                // dynamic result = await _authService.signInAnon();
                                 if(_formKey1.currentState.validate()) {
                                   setState(() => loading = true);
                                   dynamic result = await _authService.signInWithEmailAndPassword(_emailCL.text, _passwordCL.text);
                                   if(result == null) {
-                                    _showToast("Check you're credential or Verify your email !", Colors.red);
+                                    myToast("Tolong cek kredensial atau pastikan anda sudah melakukan verifikasi email !", Colors.red);
                                     setState(() {
                                       loading = false;
                                     });
                                   } else {
-                                    _showToast("Login successfully !", Colors.green);
+                                    myToast("Login berhasil !", Colors.green);
                                     setState(() => loading = false);
                                     Navigator.pop(context);
                                   }
                                 }
                               },
                               color: Colors.blue[400],
-                              padding: EdgeInsets.symmetric(horizontal: 44),
+                              padding: EdgeInsets.symmetric(horizontal: 30),
                               child: Text(
-                                "Sign in",
+                                "Masuk",
                                 style: TextStyle(
                                   fontSize: 14,
                                   letterSpacing: 2.2,
@@ -338,7 +328,7 @@ class _LoginPageState extends State<LoginPage> {
                                 });
                               },
                               child: Text(
-                                "Sign up",
+                                "Daftar",
                                 style: TextStyle(
                                   fontSize: 14,
                                   letterSpacing: 2.2,
@@ -356,14 +346,12 @@ class _LoginPageState extends State<LoginPage> {
                             setState(() => loading = true);
                             dynamic result = await _authService.signInWithGoogle();
                             if(result == null) {
-                              _showToast("Check you're credential or Verify your email !", Colors.red);
-                              // _showToast("Check you're credential or Verify your email !", Icons.close, Colors.red, 3);
+                              myToast("Tolong cek kredensial atau pastikan anda sudah melakukan verifikasi email !", Colors.red);
                               setState(() {
                                 loading = false;
                               });
                             } else {
-                              _showToast("Login succesfully !", Colors.green);
-                              // _showToast(" !", Icons.check, Colors.green, 3);
+                              myToast("Login berhasil !", Colors.green);
                               setState(() => loading = false);
                               Navigator.pop(context);
                             }
@@ -400,7 +388,7 @@ class _LoginPageState extends State<LoginPage> {
                         Container(
                           margin: EdgeInsets.only(bottom: 20),
                           child: Text(
-                            "Create a New Account",
+                            "Buat akun baru",
                             style: TextStyle(
                               fontSize: 20
                             ),
@@ -423,12 +411,12 @@ class _LoginPageState extends State<LoginPage> {
                                   setState(() => loading = true);
                                   dynamic result = await _authService.registerWithEmailAndPassword(_emailCR.text, _passwordCR.text);
                                   if(result == null) {
-                                    _showToast("Please using other email !", Colors.red);
+                                    myToast("Tolong gunakan email lain !", Colors.red);
                                     setState(() {
                                       loading = false;
                                     });
                                   } else {
-                                    _showToast("Please verify your email !", Colors.green);
+                                    myToast("Tolong cek dan verifikasi email anda !", Colors.green);
                                     setState(() => loading = false);
                                   }
                                 }
@@ -436,7 +424,7 @@ class _LoginPageState extends State<LoginPage> {
                               color: Colors.blue[400],
                               padding: EdgeInsets.symmetric(horizontal: 30),
                               child: Text(
-                                "Sign up",
+                                "Daftar",
                                 style: TextStyle(
                                   fontSize: 14,
                                   letterSpacing: 2.2,
@@ -445,14 +433,14 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             OutlineButton(
-                              padding: EdgeInsets.symmetric(horizontal: 44),
+                              padding: EdgeInsets.symmetric(horizontal: 30),
                               onPressed: () {
                                 setState(() {
                                   _pageState = 1;
                                 });
                               },
                               child: Text(
-                                "Sign in",
+                                "Masuk",
                                 style: TextStyle(
                                   fontSize: 14,
                                   letterSpacing: 2.2,

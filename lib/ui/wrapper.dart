@@ -1,9 +1,12 @@
+// System
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+// My Package
 import 'package:comat_apps/databases/db_users.dart';
 import 'package:comat_apps/models/user.dart';
 import 'package:comat_apps/models/user_detail.dart';
 import 'package:comat_apps/ui/home/home.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class Wrapper extends StatelessWidget {
   
@@ -36,14 +39,14 @@ class Wrapper extends StatelessWidget {
                 ),
                 ListTile(
                   leading: Icon(Icons.settings),
-                  title: Text("Setting"),
+                  title: Text("Pengaturan"),
                   onTap: () {
                     Navigator.pushNamed(context, '/setting');
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.info_outline),
-                  title: Text("About"),
+                  title: Text("Tentang Aplikasi"),
                   onTap: () {
                     Navigator.pushNamed(context, '/about');
                   },
@@ -71,14 +74,14 @@ class Wrapper extends StatelessWidget {
                     ),
                     ListTile(
                       leading: Icon(Icons.settings),
-                      title: Text("Setting"),
+                      title: Text("Pengaturan"),
                       onTap: () {
                         Navigator.pushNamed(context, '/setting');
                       },
                     ),
                     ListTile(
                       leading: Icon(Icons.info_outline),
-                      title: Text("About"),
+                      title: Text("Tentang Aplikasi"),
                       onTap: () {
                         Navigator.pushNamed(context, '/about');
                       },
@@ -92,23 +95,6 @@ class Wrapper extends StatelessWidget {
       }
   }
 }
-
-// class _ListTile extends StatelessWidget {
-//   _ListTile({this.icon, this.title});
-
-//   final IconData icon;
-//   final String title;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListTile(
-//       leading: Icon(icon),
-//       title: Text(title),
-//       onTap: () {
-//       }
-//     );
-//   }
-// }
 
 class _UserAccDrawer extends StatelessWidget {
   _UserAccDrawer({this.name, this.email, this.photoURL});

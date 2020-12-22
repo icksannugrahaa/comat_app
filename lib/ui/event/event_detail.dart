@@ -1,9 +1,12 @@
+// System
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+// My Package
 import 'package:comat_apps/models/event.dart';
 import 'package:comat_apps/ui/event/event_argument.dart';
-import 'package:flutter/material.dart';
 import 'package:comat_apps/ui/constant.dart';
-import '../custom_widget/ui_helper.dart';
-import 'package:intl/intl.dart';
+import 'package:comat_apps/ui/helpers/ui_helper.dart';
 
 class EventDetail extends StatefulWidget {
   final Event event;
@@ -34,7 +37,6 @@ class _EventDetailState extends State<EventDetail> {
     final String hari = DateFormat('EEEE').format(date);
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
-  print(timestart);
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -200,7 +202,7 @@ class _EventDetailState extends State<EventDetail> {
                           color: args.event.status == true ? Colors.green[400] : Colors.red,
                           padding: EdgeInsets.all(15),
                           child: Text(
-                            args.event.status == true ? "Attend" : "Unavailable",
+                            args.event.status == true ? "Daftar" : "Tidak tersedia",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 18
@@ -212,17 +214,6 @@ class _EventDetailState extends State<EventDetail> {
                   ],
                 ),
               ),
-              // Positioned(
-              //   left: 10,
-              //   top: height*0.05,
-              //   child: IconButton(
-              //     icon: Icon(Icons.arrow_back),
-              //     onPressed: () {
-              //       Navigator.pop(context);
-              //     },
-              //     color: Colors.white,
-              //   ),
-              // )
               Padding(
                 padding: const EdgeInsets.only(top: 45, left: 20),
                 child: Align(
@@ -243,75 +234,6 @@ class _EventDetailState extends State<EventDetail> {
             ],
           ),  
         )
-        // child: Column(
-        //   children: [
-        //     Header(
-        //       decorationImg: '',
-        //       textOrImg: false,
-        //       textSize: 0,
-        //       titleImage: args.event.image,
-        //       titleText: "",
-        //       online: true,
-        //       icon: Icons.arrow_back
-        //     ),
-        //     SizedBox(
-        //     height: MediaQuery.of(context).size.height-400,
-        //     child: Stack(
-        //       children: [
-        //         Container(
-        //           height: MediaQuery.of(context).size.height,
-        //           width: double.infinity,
-        //           decoration: BoxDecoration(
-        //             borderRadius: BorderRadius.circular(20),
-        //             color: Colors.white,
-        //             boxShadow: [
-        //               BoxShadow(
-        //                 offset: Offset(0, 8),
-        //                 blurRadius: 24,
-        //                 color: kShadowColor
-        //               )
-        //             ]
-        //           ),
-        //         ),
-        //         Container(
-        //           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-        //           child: Column(
-        //             crossAxisAlignment: CrossAxisAlignment.start,
-        //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //             children: [
-        //               Text(
-        //                 args.event.title, 
-        //                 style: kTitleTextStyle.copyWith(
-        //                   fontSize: 18
-        //                 ),
-        //               ),
-        //               Row(
-        //                 children: [
-        //                   Chip(
-        //                     avatar: CircleAvatar(
-        //                       backgroundColor: difference >= 7 ? Colors.green : difference >= 5 ? Colors.orange[300] : Colors.red,
-        //                       child: Icon(Icons.access_time, size: 14, color: Colors.white,),
-        //                     ),
-        //                     label: Text(tanggal(date),style: TextStyle(fontSize: 10),),
-        //                   ),
-        //                 ],
-        //               ),
-        //               Flexible(
-        //                 child: Text(
-        //                   args.event.description,
-        //                   style: TextStyle(
-        //                     fontSize: 14
-        //                   ),
-        //                 ),
-        //               ),
-        //             ],
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        //   ]
-        // ),
       ),
     );
   }

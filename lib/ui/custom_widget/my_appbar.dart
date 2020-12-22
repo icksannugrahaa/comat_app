@@ -1,10 +1,13 @@
-import 'dart:ui' as ui;
+// System
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+// My Package
 import 'package:comat_apps/databases/db_events.dart';
 import 'package:comat_apps/models/event.dart';
 import 'package:comat_apps/ui/event/event_list.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:comat_apps/ui/constant.dart';
+import 'package:comat_apps/ui/custom_widget/my_shape.dart';
 
 class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
   MyAppBar({Key key, this.isSearchAble, this.setSearch}) : preferredSize = Size.fromHeight(kToolbarHeight), super(key: key);
@@ -24,7 +27,6 @@ class _MyAppBarState extends State<MyAppBar> {
   @override
   initState() {
     super.initState();
-    print("init");
     if(widget.isSearchAble) {
       actionList.add(
         IconButton(
@@ -168,17 +170,6 @@ class SearchData extends SearchDelegate<String> {
   
   @override
   Widget buildResults(BuildContext context) {
-    // setSearch("title", "isEqualTo", query);
-    // close(context, "aaa");
-    // return Container();
-    var category = [
-      {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "All"},
-      {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Band", "key": "type", "where":"isEqualTo", "value": "Music"},
-      {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Seminar", "key": "type", "value": "Seminar", "where":"isEqualTo"},
-      {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Webinar", "key": "type", "value": "Webinar", "where":"isEqualTo"},
-      {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Workshop", "key": "type", "value": "Workshop", "where":"isEqualTo"},
-    ];
-
     return StreamProvider<List<Event>>.value(
       value: DatabaseServiceEvents().events("keywords","isLike",query),
       child: Scaffold(
@@ -187,7 +178,7 @@ class SearchData extends SearchDelegate<String> {
             Padding(
               padding: EdgeInsets.all(20.0),
               child: Text(
-                "Search Event",
+                "Cari Event",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
               ),
             ),
@@ -252,41 +243,5 @@ class SearchData extends SearchDelegate<String> {
         }
       }
     );
-  }
-  
+  } 
 }
-
-class CustomCardShapePainter extends CustomPainter {
-    final double radius;
-    final Color startColor;
-    final Color endColor;
-    CustomCardShapePainter({this.radius, this.startColor, this.endColor});
-
-    @override
-    void paint(Canvas canvas, Size size) {
-      var radius = 20.0;
-      var paint = Paint();
-
-      paint.shader = ui.Gradient.linear(
-        Offset(0,0), 
-        Offset(size.width, size.height), 
-        [HSLColor.fromColor(startColor).withLightness(0.8).toColor(),endColor]
-      );
-      var path = Path()
-        ..moveTo(0, size.height)
-        ..lineTo(size.width - radius, size.height)
-        ..quadraticBezierTo(size.width, size.height, size.width, size.height - radius)
-        ..lineTo(size.width, radius)
-        ..quadraticBezierTo(size.width, 0, size.width - radius, 0)
-        ..lineTo(size.width - 1.5 * radius, 0)
-        ..quadraticBezierTo(-radius, 2*radius, 0, size.height)
-        ..close();
-
-      canvas.drawPath(path, paint);
-    }
-    
-    @override
-    bool shouldRepaint(covariant CustomPainter oldDelegate) {
-      return true;
-    }
-  }

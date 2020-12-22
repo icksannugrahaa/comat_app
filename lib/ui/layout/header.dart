@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
-  const Header({
+  
+  final String decorationImg;
+  final String titleText;
+  final String titleImage;
+  final double imageWidth;
+  final double textSize;
+  final bool textOrImg;
+  final bool online;
+  final IconData icon;
+  final scaffoldKey;
+
+  Header({
     Key key,
     this.decorationImg,
     this.titleText,
@@ -13,16 +24,6 @@ class Header extends StatelessWidget {
     this.online,
     this.scaffoldKey
   }) : super(key: key);
-
-  final String decorationImg;
-  final String titleText;
-  final String titleImage;
-  final double imageWidth;
-  final double textSize;
-  final bool textOrImg;
-  final bool online;
-  final IconData icon;
-  final scaffoldKey;
 
   @override
   Widget build(BuildContext context) {

@@ -7,4 +7,10 @@ class DatabaseServiceEventCommittee extends DatabaseService {
   eventCommitteeCreate(Map<String, dynamic> data) {
     dataCollection.add(data);
   }
+  eventCommitteeDelete(dynamic eid) async {
+    QuerySnapshot querySnapshot = await dataCollection.where('committeeCode', isEqualTo: eid).get();
+    querySnapshot.docs.forEach((element) { 
+      element.reference.delete();
+    });
+  }
 }

@@ -1,3 +1,4 @@
+sih// My Package
 import 'package:comat_apps/models/user.dart';
 import 'package:comat_apps/services/auth.dart';
 import 'package:comat_apps/ui/about/about.dart';
@@ -12,10 +13,12 @@ import 'package:comat_apps/ui/setting/password.dart';
 import 'package:comat_apps/ui/setting/profile.dart';
 import 'package:comat_apps/ui/setting/setting.dart';
 import 'package:comat_apps/ui/wrapper.dart';
+-import 'package:comat_apps/ui/constant.dart';
+
+// System
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'ui/constant.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -31,9 +34,8 @@ class MainApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           scaffoldBackgroundColor: kBackgroundColor,
-          fontFamily: "Poppins",
           textTheme: TextTheme(
-            body1: TextStyle(color: kBodyTextColor)
+            bodyText2: TextStyle(color: kBodyTextColor)
           )
         ),
         title: titleApp,

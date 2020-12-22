@@ -1,10 +1,13 @@
+// System
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+// My Package
 import 'package:comat_apps/databases/db_events.dart';
 import 'package:comat_apps/models/event.dart';
 import 'package:comat_apps/ui/constant.dart';
 import 'package:comat_apps/ui/event/event_list.dart';
 import 'package:comat_apps/ui/layout/header.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
   Home({Key key, this.title, this.drawer, this.splashscreen, this.user}) : super(key: key);
@@ -37,11 +40,11 @@ class HomeBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var menu = [
-      {"image": "assets/images/events.png", "title": "Search Event", "route": "/event-search"},
+      {"image": "assets/images/events.png", "title": "Cari Event", "route": "/event-search"},
     ];
     if(user != null) {
-      menu.add({"image": "assets/images/newevent.png", "title": "Make Your Event", "route": "/event-manage"});
-      menu.add({"image": "assets/images/history.png", "title": "History Event", "route": "/under-construction"});
+      menu.add({"image": "assets/images/newevent.png", "title": "Buat Event", "route": "/event-manage"});
+      menu.add({"image": "assets/images/history.png", "title": "Riwayat Event", "route": "/under-construction"});
     }
     return SingleChildScrollView(
       child: Column(
@@ -78,7 +81,7 @@ class HomeBody extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: "The Closest Time Event",
+                        text: "Event terbaru",
                         style: kTitleTextStyle,
                       ),
                     ],
@@ -87,7 +90,7 @@ class HomeBody extends StatelessWidget {
                 Spacer(),
                 InkWell(
                   onTap: () => Navigator.pushNamed(context, "/event-search"),
-                  child: Text("See More", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600),)
+                  child: Text("Lihat lebih banyak", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600),)
                 ),
               ],
             ),

@@ -6,8 +6,6 @@ class DatabaseServiceUsers extends DatabaseService {
   
   DatabaseServiceUsers({uid, dataCollection}) : super(uid: uid, dataCollection: FirebaseFirestore.instance.collection("users"));
     
-  // final CollectionReference userCollection = FirebaseFirestore.instance.collection("users");
-
   Future updateUser(String name, String email, String avatar, String phone, bool gSignIn) async {
     return await dataCollection.doc(uid).set({
       'name': name,

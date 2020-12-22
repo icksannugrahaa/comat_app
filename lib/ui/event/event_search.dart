@@ -1,13 +1,14 @@
+// System
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'dart:ui' as ui;
+// My Package
 import 'package:comat_apps/databases/db_events.dart';
 import 'package:comat_apps/models/event.dart';
 import 'package:comat_apps/ui/custom_widget/my_appbar.dart';
+import 'package:comat_apps/ui/custom_widget/my_shape.dart';
 import 'package:comat_apps/ui/event/event_list.dart';
-import 'package:flutter/material.dart';
 import 'package:comat_apps/ui/constant.dart';
-
-import 'package:provider/provider.dart';
 
 class EventSearch extends StatefulWidget {
   @override
@@ -19,22 +20,13 @@ class _EventSearchState extends State<EventSearch> {
   String where = '';
   dynamic value = '';
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  final TextEditingController _searchControl = new TextEditingController();
-  var category = [
-    {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "All"},
-    {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Band", "key": "type", "where":"isEqualTo", "value": "Music"},
-    {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Seminar", "key": "type", "value": "Seminar", "where":"isEqualTo"},
-    {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Webinar", "key": "type", "value": "Webinar", "where":"isEqualTo"},
-    {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Workshop", "key": "type", "value": "Workshop", "where":"isEqualTo"},
-  ];
-
+  
   void _setSearch(String _key,String _where,dynamic _value) {
     setState(() {
       key = _key;
       where = _where;
       value = _value;
     });
-    print(_value);
   }
 
   @override
@@ -49,7 +41,7 @@ class _EventSearchState extends State<EventSearch> {
             Padding(
               padding: EdgeInsets.all(20.0),
               child: Text(
-                "Search Event",
+                "Cari Event",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
               ),
             ),
@@ -148,40 +140,5 @@ class _EventSearchState extends State<EventSearch> {
         ],
       ),
     );
-  }
-}
-
-class CustomCardShapePainter extends CustomPainter {
-  final double radius;
-  final Color startColor;
-  final Color endColor;
-  CustomCardShapePainter({this.radius, this.startColor, this.endColor});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    var radius = 20.0;
-    var paint = Paint();
-
-    paint.shader = ui.Gradient.linear(
-      Offset(0,0), 
-      Offset(size.width, size.height), 
-      [HSLColor.fromColor(startColor).withLightness(0.8).toColor(),endColor]
-    );
-    var path = Path()
-      ..moveTo(0, size.height)
-      ..lineTo(size.width - radius, size.height)
-      ..quadraticBezierTo(size.width, size.height, size.width, size.height - radius)
-      ..lineTo(size.width, radius)
-      ..quadraticBezierTo(size.width, 0, size.width - radius, 0)
-      ..lineTo(size.width - 1.5 * radius, 0)
-      ..quadraticBezierTo(-radius, 2*radius, 0, size.height)
-      ..close();
-
-    canvas.drawPath(path, paint);
-  }
-  
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
   }
 }
