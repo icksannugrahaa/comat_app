@@ -148,13 +148,13 @@ class _MyImagePickerState extends State<MyImagePicker> {
               child: widget.imageF != null || widget.imageN != null
               ? ClipRRect(
                   // borderRadius: BorderRadius.circular(50),
-                  child: (widget.imageN.toString().contains("http") && widget.imageN.isNotEmpty) 
-                  ? Image.network(
-                    widget.imageN,
+                  child: widget.imageF != null 
+                  ? Image.file(
+                    widget.imageF,
                     fit: BoxFit.fitHeight,
                   )
-                  : Image.file(
-                    widget.imageF,
+                  : Image.network(
+                    widget.imageN,
                     fit: BoxFit.fitHeight,
                   ),
                 )

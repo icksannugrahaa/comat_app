@@ -45,6 +45,8 @@ class _EventCreateState extends State<EventCreate> {
   MyHelpers _helpers = MyHelpers();
   File _imageF;
   String _imageN;
+  String formType;
+  String eid;
 
   // error 
   String _errorImage = " ";
@@ -76,6 +78,7 @@ class _EventCreateState extends State<EventCreate> {
   
   _resetForm() {
     setState(() {
+      formType = "insert";
       _dateStart = "Pilih tanggal";
       _timeStart = "Pilih waktu";
       _dateEnd = "Pilih tanggal";
@@ -93,11 +96,13 @@ class _EventCreateState extends State<EventCreate> {
       code.text = "${_helpers.getRandomString(4)}-${_helpers.getNumberString(4)}";
       _imageF = null;
       _imageN = null;
+      eid = null;
     });
   }
 
   _setForm(Event e) {
     setState(() {
+      formType = "update";
       final dateStart = DateTime.fromMillisecondsSinceEpoch(int.parse(e.timeStart.substring(18, 28)) * 1000);
       final dateEnd = DateTime.fromMillisecondsSinceEpoch(int.parse(e.timeEnd.substring(18, 28)) * 1000);
       final timestart = DateFormat('Hms').format(dateStart);
@@ -119,6 +124,7 @@ class _EventCreateState extends State<EventCreate> {
       code.text = e.committeeCode;
       _imageF = null;
       _imageN = e.image;
+      eid = e.eid;
     });
   }
 
@@ -272,7 +278,12 @@ class _EventCreateState extends State<EventCreate> {
                                 } else {
                                   dynamic _url = "";
                                   if(_imageF != null) {
-                                    _url = await _uploadService.uploadImageToFirebase(context, _imageF, "/uploads/images/events");
+                                    if(formType == "insert") {
+                                      _url = await _uploadService.uploadImageToFirebase(context, _imageF, "/uploads/images/events");
+                                    } else {
+                                      await _uploadService.deleteImageFromFirebase(_imageN);
+                                      _url = await _uploadService.uploadImageToFirebase(context, _imageF, "/uploads/images/events");
+                                    }
                                   } else { 
                                     _url = _imageN;
                                   } 
@@ -305,9 +316,14 @@ class _EventCreateState extends State<EventCreate> {
                                     "level": "Creator"
                                   };
 
-                                  await DatabaseServiceEvents().eventCreate(_event);
-                                  await DatabaseServiceEventCommittee().eventCommitteeCreate(_committee);
-                                  myToast("Event berhasil dibuat !", Colors.green[400]);
+                                  if(formType == "insert") {
+                                    await DatabaseServiceEvents().eventCreate(_event);
+                                    await DatabaseServiceEventCommittee().eventCommitteeCreate(_committee);
+                                    myToast("Event berhasil dibuat !", Colors.green[400]);
+                                  } else {
+                                    await DatabaseServiceEvents().eventUpdate(eid,_event);
+                                    myToast("Event berhasil diubah !", Colors.green[400]);
+                                  }
                                   widget.setSelectedPage(0);
                                   setState(() => loading = false);
                                 }

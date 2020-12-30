@@ -1,4 +1,4 @@
-sih// My Package
+// My Package
 import 'package:comat_apps/models/user.dart';
 import 'package:comat_apps/services/auth.dart';
 import 'package:comat_apps/ui/about/about.dart';
@@ -13,7 +13,7 @@ import 'package:comat_apps/ui/setting/password.dart';
 import 'package:comat_apps/ui/setting/profile.dart';
 import 'package:comat_apps/ui/setting/setting.dart';
 import 'package:comat_apps/ui/wrapper.dart';
--import 'package:comat_apps/ui/constant.dart';
+import 'package:comat_apps/ui/constant.dart';
 
 // System
 import 'package:flutter/material.dart';

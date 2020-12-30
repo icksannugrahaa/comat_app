@@ -36,6 +36,7 @@ class MyHelpers {
     keywords.addAll(title.split(" "));
     keywords.addAll(title.capitalizeFirstofEach.split(" "));
     keywords.addAll(title.capitalize.split(" "));
+    keywords.add(title);
 
     keywords.addAll(category.toLowerCase().split(""));
     keywords.addAll(category.toUpperCase().split(""));
@@ -56,10 +57,53 @@ class MyHelpers {
 
     return keywords;
   }
-
   convertDateFromString(String strDate){
     DateTime todayDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(strDate);
     return todayDate;
+  }
+  toIndoDay(String day) {
+    if(day.contains("Monday")) {
+      return "Senin";
+    } else if(day.contains("Tuesday")) {
+      return "Selasa"; 
+    } else if(day.contains("Wednesday")) {
+      return "Rabu"; 
+    } else if(day.contains("Thursday")) {
+      return "Kamis"; 
+    } else if(day.contains("Friday")) {
+      return "Jum'at"; 
+    } else if(day.contains("Saturday")) {
+      return "Sabtu"; 
+    } else if(day.contains("Sunday")) {
+      return "Minggu"; 
+    }
+  }
+  toIndoMonth(String month, bool full) {
+    if(month == "01" || month == "1") {
+      return full ? "Januari" : "Jan";
+    } else if(month == "02" || month == "2") {
+      return full ? "Februari" : "Feb"; 
+    } else if(month == "03" || month == "3") {
+      return full ? "Maret" : "Mar"; 
+    } else if(month == "04" || month == "4") {
+      return full ? "April" : "Apr"; 
+    } else if(month == "05" || month == "5") {
+      return full ? "Mei" : "Mei"; 
+    } else if(month == "06" || month == "6") {
+      return full ? "Juni" : "Jun"; 
+    } else if(month == "07" || month == "7") {
+      return full ? "Juli" : "Jul"; 
+    } else if(month == "08" || month == "8") {
+      return full ? "Agustus" : "Ags"; 
+    } else if(month == "09" || month == "9") {
+      return full ? "September" : "Sep"; 
+    } else if(month == "10" || month == "10") {
+      return full ? "Oktober" : "Okt"; 
+    } else if(month == "11" || month == "11") {
+      return full ? "November" : "Nov"; 
+    } else if(month == "12" || month == "12") {
+      return full ? "Desember" : "Des"; 
+    }
   }
 }
 extension CapExtension on String {

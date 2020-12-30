@@ -257,7 +257,7 @@ class EventTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final date = DateTime.fromMillisecondsSinceEpoch(int.parse(event.date.substring(18, 28)) * 1000);
+    final date = DateTime.fromMillisecondsSinceEpoch(int.parse(event.timeStart.substring(18, 28)) * 1000);
     final date2 = DateTime.now();
     final difference = date.difference(date2).inDays;
     final percentace = (event.remains * 100) / event.limit;

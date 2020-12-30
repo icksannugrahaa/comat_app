@@ -39,8 +39,8 @@ class _SettingPasswordState extends State<SettingPassword> {
               child: Form(
                 key: _formKey,
                 child: Container(
-                  padding: EdgeInsets.only(left: 16, top: 25, right: 16),
                   child: ListView(
+                    padding: EdgeInsets.all(20),
                     children: [
                       Text(
                         "Reset Password",
@@ -54,31 +54,15 @@ class _SettingPasswordState extends State<SettingPassword> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          OutlineButton(
-                            padding: EdgeInsets.symmetric(horizontal: 50),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              "Cancel",
-                              style: TextStyle(
-                                fontSize: 14,
-                                letterSpacing: 2.2,
-                                color: Colors.black
-                              ),
-                            ),
-                          ),
                           RaisedButton(
                             onPressed: () async{
                               setState(() => loading = true );
                               await _auth.resetPassword(_emailC.text);
-                              myToast("Password reset was sent to email !", Colors.green);
+                              myToast("Reset password sudah dikirim ke email anda !", Colors.green);
                               setState(() => loading = false );
                             },
                             color: Colors.blue[400],
-                            padding: EdgeInsets.symmetric(horizontal: 50),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                            padding: EdgeInsets.symmetric(horizontal: 30),
                             child: Text(
                               "Reset",
                               style: TextStyle(
@@ -87,7 +71,21 @@ class _SettingPasswordState extends State<SettingPassword> {
                                 color: Colors.white
                               ),
                             ),
-                          )
+                          ),
+                          OutlineButton(
+                            padding: EdgeInsets.symmetric(horizontal: 30),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              "Batalkan",
+                              style: TextStyle(
+                                fontSize: 14,
+                                letterSpacing: 2.2,
+                                color: Colors.black
+                              ),
+                            ),
+                          ),
                         ],
                       )
                     ],

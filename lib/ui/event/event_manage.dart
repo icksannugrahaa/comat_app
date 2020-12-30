@@ -1,5 +1,4 @@
 import 'package:comat_apps/models/event.dart';
-import 'package:comat_apps/ui/custom_widget/my_appbar.dart';
 import 'package:comat_apps/ui/event/event_create.dart';
 import 'package:comat_apps/ui/event/event_organizer.dart';
 import 'package:flutter/material.dart';

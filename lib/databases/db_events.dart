@@ -13,6 +13,10 @@ class DatabaseServiceEvents extends DatabaseService {
     dataCollection.doc(eid).delete();
   }
 
+  eventUpdate(dynamic eid, Map<String, dynamic> data) async {
+    dataCollection.doc(eid).update(data);
+  }
+
   List<Event> _eventListFromSnapshot(QuerySnapshot qs) {
     return qs.docs.map((doc){
       return Event(

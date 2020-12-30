@@ -18,9 +18,8 @@ class UploadService {
   Future deleteImageFromFirebase(String _url) async {
     var fileUrl = Uri.decodeFull(basename(_url)).replaceAll(new RegExp(r'(\?alt).*'), '');
 
-    final Reference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child(fileUrl);
-        await firebaseStorageRef.delete();
+    final Reference firebaseStorageRef = FirebaseStorage.instance.ref().child(fileUrl);
+    await firebaseStorageRef.delete();
   }
 
 }

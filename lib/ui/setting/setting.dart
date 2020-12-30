@@ -35,91 +35,83 @@ class _SettingState extends State<Setting> {
             if(userDetail != null && userDetail.gSignIn == false) {
               return Container(
                 child: ListView(
+                  padding: EdgeInsets.all(20),
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 16, top: 25, right: 16),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Pengaturan",
-                            style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-                          ),
-                          SizedBox(
-                            height: 40,
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.person,
-                                color: Colors.blue[400],
-                              ),
-                              SizedBox(
-                                width: 8,
-                              ),
-                              Text(
-                                "Akun",
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          Divider(
-                            height: 15,
-                            thickness: 2,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          SettingAccountTile(route: "/reset-password", title: "Reset Password",),
-                          SettingAccountTile(route: "/profile", title: "Ubah Profile",),
-                          SizedBox(
-                            height: 40,
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.volume_up,
-                                color: Colors.blue[400],
-                              ),
-                              SizedBox(
-                                width: 8,
-                              ),
-                              Text(
-                                "Notifikasi",
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          Divider(
-                            height: 15,
-                            thickness: 2,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          buildNotificationOptionRow("Pengingat Event", true),
-                          SizedBox(
-                            height: 50,
-                          ),
-                          Center(
-                            child: OutlineButton(
-                              padding: EdgeInsets.symmetric(horizontal: 40),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)
-                              ),
-                              onPressed: () async {
-                                await _auth.signOut();
-                                myToast("Logout berhasil !", Colors.green);
-                                Navigator.pushReplacementNamed(context, "/home");
-                              },
-                              child: Text(
-                                "SIGN OUT",
-                                style: TextStyle(fontSize: 16, letterSpacing: 2.2, color: Colors.black)
-                              ),
-                            ),
-                          )
-                        ], 
+                    Text(
+                      "Pengaturan",
+                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.person,
+                          color: Colors.blue[400],
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          "Akun",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    Divider(
+                      height: 15,
+                      thickness: 2,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    SettingAccountTile(route: "/reset-password", title: "Reset Password",),
+                    SettingAccountTile(route: "/profile", title: "Ubah Profile",),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.volume_up,
+                          color: Colors.blue[400],
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          "Notifikasi",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    Divider(
+                      height: 15,
+                      thickness: 2,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    buildNotificationOptionRow("Pengingat Event", true),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Center(
+                      child: OutlineButton(
+                        padding: EdgeInsets.symmetric(horizontal: 40),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)
+                        ),
+                        onPressed: () async {
+                          await _auth.signOut();
+                          myToast("Logout berhasil !", Colors.green);
+                          Navigator.pushReplacementNamed(context, "/home");
+                        },
+                        child: Text(
+                          "SIGN OUT",
+                          style: TextStyle(fontSize: 16, letterSpacing: 2.2, color: Colors.black)
+                        ),
                       ),
                     )
                   ],

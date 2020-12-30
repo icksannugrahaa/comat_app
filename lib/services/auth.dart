@@ -62,9 +62,8 @@ class AuthService {
       );
       final UserCredential authResult = await _auth.signInWithCredential(credential);
       User user = authResult.user;
-      // print(user);
+  
       await DatabaseServiceUsers(uid: user.uid).updateUser(user.displayName, user.email, user.photoURL, user.phoneNumber, true);
-      
       return _userFromFirebase(user);
     } catch (e) {
       print(e.toString());

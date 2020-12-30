@@ -1,6 +1,7 @@
 // System
 import 'dart:io';
 import 'package:comat_apps/ui/custom_widget/my_imagepicker.dart';
+import 'package:comat_apps/ui/custom_widget/my_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -70,6 +71,15 @@ class _SettingProfileState extends State<SettingProfile> {
                     ),
                     SizedBox(height: 15,),
                     MyImagePicker(imageF: _imageFile, errorImage: _errorImage, picker: picker, imageN: userDetail.avatar, setImageState: setImageState,isProfile: true,),
+                    SizedBox(height: 15,),
+                    Center(
+                      child: Text(
+                        _errorImage,
+                        style: TextStyle(
+                          color: Colors.red
+                        ),
+                      )
+                    ),
                     SizedBox(height: 35,),
                     NormalInput(isPassword: false, label: "Full Name", hint: "Full Name", inputType: TextInputType.text,controller: _nameC,),
                     NormalInput(isPassword: false, label: "Email", hint: "Email", inputType: TextInputType.emailAddress,controller: _emailC, enable: false,),
@@ -78,14 +88,55 @@ class _SettingProfileState extends State<SettingProfile> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        RaisedButton(
+                          onPressed: () async{
+                            setState(() => loading = true );
+                            if(_formKey.currentState.validate()) {
+                              dynamic _url = null;
+                              if(_imageFile != null) {
+                                if(userDetail.avatar.contains('firebasestorage')) {
+                                  await _uploadService.deleteImageFromFirebase(userDetail.avatar);
+                                }
+                                _url = await _uploadService.uploadImageToFirebase(context, _imageFile, "/uploads/images/users");
+                              } else {
+                                _url = userDetail.avatar;
+                              }
+
+                              await DatabaseServiceUsers(uid: user.uid).updateUser(
+                                _nameC.text ?? userDetail.name,
+                                _emailC.text ?? userDetail.email, 
+                                _url, 
+                                _phoneC.text ?? userDetail.phone,
+                                userDetail.gSignIn
+                              );
+                              setState(() {
+                                loading = false;
+                                _errorImage = " ";
+                              });
+                              myToast("Profile berhasil diubah !", Colors.green[400]);
+                            } else {
+                              myToast("Tolong lengkapi profile anda !", Colors.red);
+                            }
+                            setState(() => loading = false );
+                          },
+                          color: Colors.blue[400],
+                          padding: EdgeInsets.symmetric(horizontal: 30),
+                          child: Text(
+                            "Simpan",
+                            style: TextStyle(
+                              fontSize: 14,
+                              letterSpacing: 2.2,
+                              color: Colors.white
+                            ),
+                          ),
+                        ),
                         OutlineButton(
-                          padding: EdgeInsets.symmetric(horizontal: 50),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          padding: EdgeInsets.symmetric(horizontal: 30),
                           onPressed: () {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            "Cancel",
+                            "Batalkan",
                             style: TextStyle(
                               fontSize: 14,
                               letterSpacing: 2.2,
@@ -93,37 +144,6 @@ class _SettingProfileState extends State<SettingProfile> {
                             ),
                           ),
                         ),
-                        RaisedButton(
-                          onPressed: () async{
-                            setState(() => loading = true );
-                            if(_formKey.currentState.validate()) {
-                              dynamic _url = await _uploadService.uploadImageToFirebase(context, _imageFile, "/uploads/images/users");
-                              if(_url != "") {
-                                await DatabaseServiceUsers(uid: user.uid).updateUser(
-                                  _nameC.text ?? userDetail.name,
-                                  _emailC.text ?? userDetail.email, 
-                                  _url ?? userDetail.avatar, 
-                                  _phoneC.text ?? userDetail.phone,
-                                  userDetail.gSignIn
-                                );
-                                setState(() => loading = false);
-                              }
-                              Navigator.pop(context);
-                            }
-                            setState(() => loading = false );
-                          },
-                          color: Colors.blue[400],
-                          padding: EdgeInsets.symmetric(horizontal: 50),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                          child: Text(
-                            "Save",
-                            style: TextStyle(
-                              fontSize: 14,
-                              letterSpacing: 2.2,
-                              color: Colors.white
-                            ),
-                          ),
-                        )
                       ],
                     )
                   ],
