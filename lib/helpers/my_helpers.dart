@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:intl/intl.dart';
+import 'package:comat_apps/ui/constant.dart';
 
 class MyHelpers {
   
@@ -104,6 +105,16 @@ class MyHelpers {
     } else if(month == "12" || month == "12") {
       return full ? "Desember" : "Des"; 
     }
+  }
+  String encryptDecrypt(String input) {
+    var output = [];
+    
+    for(var i = 0; i < input.length; i++) {
+      var charCode = input.codeUnitAt(i) ^ key[i % key.length].codeUnitAt(0);
+      output.add(new String.fromCharCode(charCode));
+    }
+    
+    return output.join("");
   }
 }
 extension CapExtension on String {

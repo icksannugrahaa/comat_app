@@ -49,3 +49,5 @@ var category = [
   {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Webinar", "key": "type", "value": "Webinar", "where":"isEqualTo"},
   {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Workshop", "key": "type", "value": "Workshop", "where":"isEqualTo"},
 ];
+
+var key = ['i', 'c', 'k', 's', 'a', 'n', '0', '1'];

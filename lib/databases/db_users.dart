@@ -4,10 +4,10 @@ import 'package:comat_apps/databases/database.dart';
 
 class DatabaseServiceUsers extends DatabaseService {
   
-  DatabaseServiceUsers({uid, dataCollection}) : super(uid: uid, dataCollection: FirebaseFirestore.instance.collection("users"));
+  DatabaseServiceUsers({uid, dataCollection}) : super(id: uid, dataCollection: FirebaseFirestore.instance.collection("users"));
     
   Future updateUser(String name, String email, String avatar, String phone, bool gSignIn) async {
-    return await dataCollection.doc(uid).set({
+    return await dataCollection.doc(id).set({
       'name': name,
       'email': email,
       'avatar': avatar,
@@ -18,7 +18,7 @@ class DatabaseServiceUsers extends DatabaseService {
 
   UserDetail _userDetailFromSnapshot(DocumentSnapshot snapshot) {
     return UserDetail(
-      uid: uid,
+      uid: id,
       name: snapshot.get('name') ?? '',
       avatar: snapshot.get('avatar') ?? '',
       email: snapshot.get('email') ?? '',
@@ -45,6 +45,6 @@ class DatabaseServiceUsers extends DatabaseService {
   }
 
   Stream<UserDetail> get userData {
-    return dataCollection.doc(uid).snapshots().map(_userDetailFromSnapshot);
+    return dataCollection.doc(id).snapshots().map(_userDetailFromSnapshot);
   }
 }

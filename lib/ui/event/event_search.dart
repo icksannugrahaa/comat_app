@@ -11,28 +11,33 @@ import 'package:comat_apps/ui/event/event_list.dart';
 import 'package:comat_apps/ui/constant.dart';
 
 class EventSearch extends StatefulWidget {
+  final String keys;
+  final String where;
+  final dynamic value;
+  EventSearch({this.keys, this.value, this.where});
   @override
   _EventSearchState createState() => _EventSearchState();
 }
 
 class _EventSearchState extends State<EventSearch> {
-  String key = '';
-  String where = '';
-  dynamic value = '';
+  String _key = '';
+  String _where = '';
+  dynamic _value = '';
+
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   
   void _setSearch(String _key,String _where,dynamic _value) {
     setState(() {
-      key = _key;
-      where = _where;
-      value = _value;
+      _key = _key;
+      _where = _where;
+      _value = _value;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<Event>>.value(
-      value: DatabaseServiceEvents().events(key,where,value),
+      value: DatabaseServiceEvents().events(_key,_where,_value),
       child: Scaffold(
         key: _scaffoldKey,
         appBar: MyAppBar(isSearchAble: true, setSearch: _setSearch,),
@@ -97,9 +102,9 @@ class _EventSearchState extends State<EventSearch> {
                   child: InkWell(
                     onTap: () {
                       setState(() {
-                        value = _value;
-                        key = _key;
-                        where = _where;
+                        _value = _value;
+                        _key = _key;
+                        _where = _where;
                       });
                     },
                     highlightColor: colorStart,

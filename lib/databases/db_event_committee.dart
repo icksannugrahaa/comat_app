@@ -3,13 +3,13 @@ import 'package:comat_apps/databases/database.dart';
 import 'package:comat_apps/models/event_committee.dart';
 
 class DatabaseServiceEventCommittee extends DatabaseService {
-  DatabaseServiceEventCommittee ({uid, dataCollection}) : super(uid: uid, dataCollection: FirebaseFirestore.instance.collection("event_committee"));
+  DatabaseServiceEventCommittee ({ecid, dataCollection}) : super(id: ecid, dataCollection: FirebaseFirestore.instance.collection("event_committee"));
 
   eventCommitteeCreate(Map<String, dynamic> data) {
     dataCollection.add(data);
   }
-  eventCommitteeDelete(dynamic eid) async {
-    QuerySnapshot querySnapshot = await dataCollection.where('committeeCode', isEqualTo: eid).get();
+  eventCommitteeDelete(dynamic ecid) async {
+    QuerySnapshot querySnapshot = await dataCollection.where('committeeCode', isEqualTo: ecid).get();
     querySnapshot.docs.forEach((element) { 
       element.reference.delete();
     });
@@ -24,10 +24,10 @@ class DatabaseServiceEventCommittee extends DatabaseService {
       );
     }).toList();
   }
-  Stream<List<EventCommittee>> myEventsCommitee(String key,dynamic value, String uid) { 
+  Stream<List<EventCommittee>> myEventsCommitee(String key,dynamic value, String ecid) { 
     return dataCollection
       .where(key, isEqualTo: value)
-      .where('userId', isEqualTo: uid)
+      .where('userId', isEqualTo: ecid)
       .snapshots()
       .map(_eventCommiteeListFromSnapshot); 
   }

@@ -3,7 +3,7 @@ import 'package:comat_apps/databases/database.dart';
 import 'package:comat_apps/models/event.dart';
 
 class DatabaseServiceEvents extends DatabaseService {
-  DatabaseServiceEvents({uid, dataCollection}) : super(uid: uid, dataCollection: FirebaseFirestore.instance.collection("events"));
+  DatabaseServiceEvents({eid, dataCollection}) : super(id: eid, dataCollection: FirebaseFirestore.instance.collection("events"));
 
   eventCreate(Map<String, dynamic> data) {
     dataCollection.add(data);
@@ -37,7 +37,8 @@ class DatabaseServiceEvents extends DatabaseService {
         obtained: doc.get('obtained') ?? '',
         organizer: doc.get('organizer') ?? '',
         price: doc.get('price') ?? 0,
-        rundown: doc.get('rundown') ?? ''
+        rundown: doc.get('rundown') ?? '',
+        shareUrl: doc.get('share_url') ?? ''
       );
     }).toList();
   }

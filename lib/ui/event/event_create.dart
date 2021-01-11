@@ -1,5 +1,6 @@
 // System
 import 'dart:io';
+import 'package:comat_apps/services/dynamic_link.dart';
 import 'package:comat_apps/ui/custom_widget/my_appbar.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -41,12 +42,14 @@ class _EventCreateState extends State<EventCreate> {
   String committeeCode;
   String pageTitle = 'Buat Event Baru';
   List<String> options = <String>['Workshop', 'Seminar', 'Webinar', 'Festival', 'Music', 'Social Activity', 'Online Discussion'];
-  UploadService _uploadService = UploadService();
-  MyHelpers _helpers = MyHelpers();
-  File _imageF;
   String _imageN;
   String formType;
   String eid;
+
+  UploadService _uploadService = UploadService();
+  MyHelpers _helpers = MyHelpers();
+  File _imageF;
+  DynamicLinkService _linkService = DynamicLinkService();
 
   // error 
   String _errorImage = " ";
@@ -288,6 +291,7 @@ class _EventCreateState extends State<EventCreate> {
                                     _url = _imageN;
                                   } 
                                   List<String> keywords = _helpers.makeKeywords(title.text, category, place.text);
+                                  var _shareUrl = await _linkService.createEventShareLink(title.text);
                                   
                                   Map<String, dynamic> _event = {
                                     "userCreated": user.uid,
@@ -308,6 +312,7 @@ class _EventCreateState extends State<EventCreate> {
                                     "title": title.text,
                                     "category": category,
                                     "keywords": keywords,
+                                    "share_url": _shareUrl
                                   };
                                   
                                   Map<String, dynamic> _committee = {

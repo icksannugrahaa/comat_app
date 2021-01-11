@@ -1,3 +1,4 @@
+import 'package:comat_apps/ui/custom_widget/my_appbar.dart';
 import 'package:flutter/material.dart';
 
 class UnderConstruction extends StatefulWidget {
@@ -9,19 +10,7 @@ class _UnderConstructionState extends State<UnderConstruction> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 1,
-        leading: IconButton(
-          icon: Icon(
-            Icons.keyboard_backspace,
-            color: Colors.blue[400],
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        )
-      ),
+      appBar: MyAppBar(isSearchAble: false,),
       body: Container(
         child: ListView(
           shrinkWrap: true,

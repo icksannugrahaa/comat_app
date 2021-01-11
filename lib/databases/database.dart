@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 class DatabaseService {
-  final String uid;
+  final String id;
   final CollectionReference dataCollection;
-  DatabaseService({this.uid, this.dataCollection});
+  DatabaseService({this.id, this.dataCollection});
 }
