@@ -38,7 +38,8 @@ class DatabaseServiceEvents extends DatabaseService {
         organizer: doc.get('organizer') ?? '',
         price: doc.get('price') ?? 0,
         rundown: doc.get('rundown') ?? '',
-        shareUrl: doc.get('share_url') ?? ''
+        shareUrl: doc.get('share_url') ?? '',
+        committee: doc.get('committee') ?? '',
       );
     }).toList();
   }

@@ -1,7 +1,7 @@
 class Event {
   final String eid;
   final String userCreated;
-  final String committeeCode; 
+  final String committeeCode;
   final String title;
   final String description;
   final String place;
@@ -15,6 +15,7 @@ class Event {
   final String category;
   final String shareUrl;
   final List<String> keywords;
+  final List<dynamic> committee;
   final int limit;
   final int price;
   final int remains;
@@ -40,6 +41,7 @@ class Event {
     this.category,
     this.place,
     this.date,
-    this.shareUrl
+    this.shareUrl,
+    this.committee
   });
 }

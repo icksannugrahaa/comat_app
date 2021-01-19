@@ -36,6 +36,9 @@ class _EventSearchState extends State<EventSearch> {
 
   @override
   Widget build(BuildContext context) {
+                      print(_value);
+                      print(_key);
+                      print(_where);
     return StreamProvider<List<Event>>.value(
       value: DatabaseServiceEvents().events(_key,_where,_value),
       child: Scaffold(
@@ -69,7 +72,7 @@ class _EventSearchState extends State<EventSearch> {
     );
   }
 
-  Padding buildCategory(Color colorStart, Color colorEnd,String title, String _key, String _where, dynamic _value) {
+  Padding buildCategory(Color colorStart, Color colorEnd,String title, String key, String where, dynamic value) {
     return Padding(
       padding: EdgeInsets.only(top: 15, right: 15, left: 15),
       child: Stack(
@@ -102,9 +105,9 @@ class _EventSearchState extends State<EventSearch> {
                   child: InkWell(
                     onTap: () {
                       setState(() {
-                        _value = _value;
-                        _key = _key;
-                        _where = _where;
+                        _value = value;
+                        _key = key;
+                        _where = where;
                       });
                     },
                     highlightColor: colorStart,

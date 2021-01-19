@@ -92,7 +92,7 @@ class _SettingProfileState extends State<SettingProfile> {
                           onPressed: () async{
                             setState(() => loading = true );
                             if(_formKey.currentState.validate()) {
-                              dynamic _url = null;
+                              dynamic _url;
                               if(_imageFile != null) {
                                 if(userDetail.avatar.contains('firebasestorage')) {
                                   await _uploadService.deleteImageFromFirebase(userDetail.avatar);

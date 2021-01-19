@@ -18,17 +18,36 @@ class DatabaseServiceEventCommittee extends DatabaseService {
     return qs.docs.map((doc){
       return EventCommittee(
         collectionId: doc.reference.id,
-        userId: doc.get('userId') ?? '',
+        userData: doc.get('userData') ?? '',
         committeeCode: doc.get('committeeCode') ?? '',
         level: doc.get('level') ?? '',
       );
     }).toList();
   }
   Stream<List<EventCommittee>> myEventsCommitee(String key,dynamic value, String ecid) { 
+    if(key != null && value != null) {
+      return dataCollection
+        .where(key, isEqualTo: value)
+        .orderBy('userData', descending: false)
+        .snapshots()
+        .map(_eventCommiteeListFromSnapshot);
+    } else {
+      return dataCollection
+        .orderBy('userData', descending: false)
+        .snapshots()
+        .map(_eventCommiteeListFromSnapshot);
+    } 
+  }
+  Stream<List<EventCommittee>> myEvent(String ecid) {
     return dataCollection
-      .where(key, isEqualTo: value)
-      .where('userId', isEqualTo: ecid)
+      .where('userData', arrayContains: ecid)
       .snapshots()
-      .map(_eventCommiteeListFromSnapshot); 
+      .map(_eventCommiteeListFromSnapshot);
+  }
+  Stream<List<EventCommittee>> allEvent() {
+    return dataCollection
+      .orderBy('userData', descending: false)
+      .snapshots()
+      .map(_eventCommiteeListFromSnapshot);
   }
 }

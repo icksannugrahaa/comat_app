@@ -21,8 +21,8 @@ class DatabaseServiceOrders extends DatabaseService {
     return qs.docs.map((doc){
       return Order(
         oid: doc.reference.id,
-        eid: doc.get('eid') ?? '',
-        uid: doc.get('uid') ?? '',
+        userData: doc.get('userData') ?? null,
+        eventData: doc.get('eventData') ?? null,
         orderDate: doc.get('orderDate').toString() ?? '',
         paymentDate: doc.get('paymentDate').toString() ?? '',
         paymentMethod: doc.get('paymentMethod') ?? '',
@@ -37,7 +37,7 @@ class DatabaseServiceOrders extends DatabaseService {
       if(where == 'isEqualTo') {
         return dataCollection
           .where(key, isEqualTo: value)
-          .where('uid', isEqualTo: uid)
+          .where('userData', arrayContains: uid)
           .orderBy('orderDate', descending: false)
           .limit(10)
           .snapshots()
@@ -45,7 +45,7 @@ class DatabaseServiceOrders extends DatabaseService {
       } else if(where == 'isGreaterThan') {
         return dataCollection
           .where(key, isGreaterThan: value)
-          .where('uid', isEqualTo: uid)
+          .where('userData', arrayContains: uid)
           .orderBy('orderDate', descending: false)
           .limit(10)
           .snapshots()
@@ -53,7 +53,7 @@ class DatabaseServiceOrders extends DatabaseService {
       } else if(where == 'isLessThan') {
         return dataCollection
           .where(key, isLessThan: value)
-          .where('uid', isEqualTo: uid)
+          .where('userData', arrayContains: uid)
           .orderBy('orderDate', descending: false)
           .limit(10)
           .snapshots()
@@ -61,7 +61,7 @@ class DatabaseServiceOrders extends DatabaseService {
       } else if(where == 'isNull') {
         return dataCollection
           .where(key, isNull: value)
-          .where('uid', isEqualTo: uid)
+          .where('userData', arrayContains: uid)
           .orderBy('orderDate', descending: false)
           .limit(10)
           .snapshots()
@@ -70,7 +70,7 @@ class DatabaseServiceOrders extends DatabaseService {
         // List<dynamic> val = value; 
         return dataCollection
           .where(key, arrayContains: value)
-          .where('uid', isEqualTo: uid)
+          .where('userData', arrayContains: uid)
           .orderBy('orderDate', descending: false)
           .limit(10)
           .snapshots()
@@ -78,14 +78,14 @@ class DatabaseServiceOrders extends DatabaseService {
       } else {
         return dataCollection
           .orderBy('orderDate', descending: false)
-          .where('uid', isEqualTo: uid)
+          .where('userData', arrayContains: uid)
           .limit(10)
           .snapshots()
           .map(_orderListFromSnapshot);
       }
       
     } else {
-      return dataCollection.orderBy('orderDate', descending: false).snapshots().map(_orderListFromSnapshot);
+      return dataCollection.orderBy('orderDate', descending: false).where('userData', arrayContains: uid).snapshots().map(_orderListFromSnapshot);
     }
   }
   
@@ -94,7 +94,7 @@ class DatabaseServiceOrders extends DatabaseService {
       if(where == 'isEqualTo') {
         return dataCollection
           .where(key, isEqualTo: value)
-          .where('eid', isEqualTo: eid)
+          .where('eventData', arrayContains: eid)
           .orderBy('orderDate', descending: false)
           .limit(10)
           .snapshots()
@@ -102,7 +102,7 @@ class DatabaseServiceOrders extends DatabaseService {
       } else if(where == 'isGreaterThan') {
         return dataCollection
           .where(key, isGreaterThan: value)
-          .where('eid', isEqualTo: eid)
+          .where('eventData', arrayContains: eid)
           .orderBy('orderDate', descending: false)
           .limit(10)
           .snapshots()
@@ -110,7 +110,7 @@ class DatabaseServiceOrders extends DatabaseService {
       } else if(where == 'isLessThan') {
         return dataCollection
           .where(key, isLessThan: value)
-          .where('eid', isEqualTo: eid)
+          .where('eventData', arrayContains: eid)
           .orderBy('orderDate', descending: false)
           .limit(10)
           .snapshots()
@@ -118,7 +118,7 @@ class DatabaseServiceOrders extends DatabaseService {
       } else if(where == 'isNull') {
         return dataCollection
           .where(key, isNull: value)
-          .where('eid', isEqualTo: eid)
+          .where('eventData', arrayContains: eid)
           .orderBy('orderDate', descending: false)
           .limit(10)
           .snapshots()
@@ -127,7 +127,7 @@ class DatabaseServiceOrders extends DatabaseService {
         // List<dynamic> val = value; 
         return dataCollection
           .where(key, arrayContains: value)
-          .where('eid', isEqualTo: eid)
+          .where('eventData', arrayContains: eid)
           .orderBy('orderDate', descending: false)
           .limit(10)
           .snapshots()
@@ -135,14 +135,14 @@ class DatabaseServiceOrders extends DatabaseService {
       } else {
         return dataCollection
           .orderBy('orderDate', descending: false)
-          .where('eid', isEqualTo: eid)
+          .where('eventData', arrayContains: eid)
           .limit(10)
           .snapshots()
           .map(_orderListFromSnapshot);
       }
       
     } else {
-      return dataCollection.orderBy('orderDate', descending: false).snapshots().map(_orderListFromSnapshot);
+      return dataCollection.orderBy('orderDate', descending: false).where('eventData', arrayContains: eid).snapshots().map(_orderListFromSnapshot);
     }
   }
 }

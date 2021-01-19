@@ -1,12 +1,15 @@
 // My Package
 import 'package:comat_apps/databases/db_event_committee.dart';
+import 'package:comat_apps/models/user_detail.dart';
 import 'package:comat_apps/services/upload_file.dart';
+import 'package:comat_apps/ui/custom_widget/my_alert_dialog.dart';
 import 'package:comat_apps/ui/custom_widget/my_toast.dart';
 import 'package:comat_apps/databases/db_events.dart';
 import 'package:comat_apps/models/event.dart';
 import 'package:comat_apps/ui/event/event_argument.dart';
 import 'package:comat_apps/ui/event/event_detail.dart';
 import 'package:comat_apps/ui/constant.dart';
+import 'package:comat_apps/ui/event/event_detail_management.dart';
 
 // System
 import 'package:flutter/material.dart';
@@ -30,7 +33,7 @@ class _EventListState extends State<EventList> {
   @override
   Widget build(BuildContext context) {
     final events = Provider.of<List<Event>>(context);
-    
+    print(events != null ? events.length : 'kosong');
     if (events == null) {
       return Container(
         padding: EdgeInsets.only(top: 70),
@@ -43,36 +46,36 @@ class _EventListState extends State<EventList> {
       );
     } else {
       if (widget.isManage == true) {
-        return Container(
-            height: 450,
-            child: EventTiles(
-                setSelectedEvent: widget.setSelectedEvent,
-                setSelectedPage: widget.setSelectedPage));
+        return EventTiles(
+            setSelectedEvent: widget.setSelectedEvent,
+            setSelectedPage: widget.setSelectedPage);
       } else {
-        return events == null || events.length < 1 
-        ? Container(
-            padding: EdgeInsets.only(top: 70),
-            child: Center(
-              child: Text(
-                "Tidak ada event yang tersedia :(",
-                style: TextStyle(
-                    fontSize: 24, fontWeight: FontWeight.w500),
-              ),
-            ),
-          )
-        : ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: events.length ?? 1,
-          itemBuilder: (context, index) {
-            return index < widget.limit
-              ? Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: EventTile(event: events[index]),
-                )
-              : Container();
-          },
-        );
+        return events == null || events.length < 1
+            ? Container(
+                padding: EdgeInsets.only(top: 70),
+                child: Center(
+                  child: Text(
+                    "Tidak ada event yang tersedia :(",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                  ),
+                ),
+              )
+            : ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: events.length ?? 1,
+                itemBuilder: (context, index) {
+                  return index < widget.limit
+                      ? Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: EventTile(
+                            event: events[index],
+                            isAdmin: false,
+                          ),
+                        )
+                      : Container();
+                },
+              );
       }
     }
   }
@@ -117,11 +120,7 @@ class _EventTilesState extends State<EventTiles> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: OrientationBuilder(
-        builder: (context, orientation) => _buildList(context),
-      ),
-    );
+    return _buildList(context);
   }
 
   Widget _buildList(BuildContext context) {
@@ -137,24 +136,29 @@ class _EventTilesState extends State<EventTiles> {
           )
         : ListView.builder(
             shrinkWrap: true,
-            physics: const AlwaysScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: events.length ?? 1,
             itemBuilder: (context, index) {
               final Axis slidableDirection = Axis.horizontal;
-              return Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(borderRadius),
-                  ),
-                  margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-                  padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+              return Padding(
+                  padding: const EdgeInsets.all(20.0),
                   child: _getSlidableWithLists(
                       context, index, slidableDirection, events[index]));
             },
-            itemCount: events.length,
           );
   }
 
   Widget _getSlidableWithLists(
       BuildContext context, int index, Axis direction, Event item) {
+    _func(UserDetail us, bool isTrue) async {
+      if (isTrue) {
+        await DatabaseServiceEvents(eid: item.eid).eventDelete(item.eid);
+        await DatabaseServiceEventCommittee()
+            .eventCommitteeDelete(item.committeeCode);
+        await _uploadService.deleteImageFromFirebase(item.image);
+      }
+    }
+
     return Slidable(
       closeOnScroll: true,
       key: Key(item.title),
@@ -205,11 +209,14 @@ class _EventTilesState extends State<EventTiles> {
           color: Colors.red,
           icon: Icons.delete,
           onTap: () async {
-            await DatabaseServiceEvents(eid: item.eid).eventDelete(item.eid);
-            await DatabaseServiceEventCommittee()
-                .eventCommitteeDelete(item.committeeCode);
-            await _uploadService.deleteImageFromFirebase(item.image);
-            myToast("Event berhasil dihapus !", Colors.green[400]);
+            myAlertDialog(
+                context,
+                "Apakah anda yakin akan menghapus Event ini ?\nTekan 'Lanjutkan' untuk menyetujui.",
+                null,
+                _func,
+                "Event berhasil dihapus !",
+                Colors.green,
+                null);
           },
         ),
       ],
@@ -224,6 +231,7 @@ class HorizontalListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return EventTile(
       event: item,
+      isAdmin: true,
     );
   }
 }
@@ -241,6 +249,7 @@ class VerticalListItem extends StatelessWidget {
               : Slidable.of(context)?.close(),
       child: EventTile(
         event: item,
+        isAdmin: true,
       ),
     );
   }
@@ -248,7 +257,8 @@ class VerticalListItem extends StatelessWidget {
 
 class EventTile extends StatelessWidget {
   final Event event;
-  const EventTile({Key key, this.event}) : super(key: key);
+  final bool isAdmin;
+  const EventTile({Key key, this.isAdmin, this.event}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -279,11 +289,17 @@ class EventTile extends StatelessWidget {
               child: Material(
                 borderRadius: BorderRadius.circular(borderRadius),
                 child: InkWell(
-                  onTap: () => Navigator.pushNamed(
-                    context,
-                    EventDetail.routeName,
-                    arguments: EventArguments(event),
-                  ),
+                  onTap: () => isAdmin
+                      ? Navigator.pushNamed(
+                          context,
+                          EventDetailManagement.routeName,
+                          arguments: EventArguments(event),
+                        )
+                      : Navigator.pushNamed(
+                          context,
+                          EventDetail.routeName,
+                          arguments: EventArguments(event),
+                        ),
                   borderRadius: BorderRadius.circular(borderRadius),
                 ),
               ),

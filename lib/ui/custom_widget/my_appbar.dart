@@ -178,20 +178,8 @@ class SearchData extends SearchDelegate<String> {
             Padding(
               padding: EdgeInsets.all(20.0),
               child: Text(
-                "Cari Event",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-              ),
-            ),
-            Container(
-              height: 80.0,
-              width: MediaQuery.of(context).size.width,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                primary: false,
-                itemCount: category == null ? 0.0 : category.length,
-                itemBuilder: (BuildContext context, int i) {
-                  return buildCategory(category[i]['colorStart'],category[i]['colorEnd'], category[i]['title'], category[i]['key'], category[i]['where'], category[i]['value']);
-                },
+                "Hasil Pencarian",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ),
             ),
             EventList(limit: 10,),

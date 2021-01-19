@@ -1,7 +1,10 @@
 import 'package:comat_apps/databases/db_order.dart';
+import 'package:comat_apps/databases/db_users.dart';
+import 'package:comat_apps/models/user_detail.dart';
 import 'package:comat_apps/models/event.dart';
 import 'package:comat_apps/models/order.dart';
 import 'package:comat_apps/models/user.dart';
+import 'package:comat_apps/ui/custom_widget/my_alert_dialog.dart';
 import 'package:comat_apps/ui/custom_widget/my_appbar.dart';
 import 'package:comat_apps/ui/custom_widget/my_toast.dart';
 import 'package:comat_apps/ui/order/order_argument.dart';
@@ -129,7 +132,7 @@ class _OrderPageState extends State<OrderPage> {
     final user = Provider.of<User>(context);
 
     return StreamProvider<List<Order>>.value(
-      value: DatabaseServiceOrders().myOrder('eid', 'isEqualTo', args.event.eid, user.uid),
+      value: DatabaseServiceOrders().myOrder('', '', '', user.uid),
       child: Scaffold(
         appBar: MyAppBar(isSearchAble: false,),
         body: Container(
@@ -206,57 +209,107 @@ class BuildBuyButton extends StatelessWidget {
   final String _paymentMethod;
   final User user;
 
+  _func(UserDetail users, bool isTrue) async {
+    if(isTrue) {
+        List<dynamic> _user = [
+          users.uid,
+          users.name,
+          users.email,
+          users.avatar,
+          users.phone.toString(),
+        ];
+
+        List<dynamic> _event = [
+          args.event.eid,
+          args.event.description, 
+          args.event.image,
+          args.event.limit,
+          args.event.obtained,
+          args.event.organizer,
+          args.event.place,
+          args.event.price,
+          args.event.remains,
+          args.event.status,
+          DateTime.fromMillisecondsSinceEpoch(int.parse(args.event.timeEnd.substring(18, 28)) * 1000),
+          DateTime.fromMillisecondsSinceEpoch(int.parse(args.event.timeStart.substring(18, 28)) * 1000),
+          args.event.title,
+          args.event.category,
+        ];
+
+        Map<String, dynamic> _order = {
+          "userData": _user,
+          "eventData": _event,
+          "orderDate": DateTime.now(),
+          "paymentDate": null, 
+          "paymentMethod": _paymentMethod,
+          "paymentTotal": args.event.price,
+          "status": "Menunggu pembayaran",
+        };
+        await DatabaseServiceOrders().orderCreate(_order);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final myOrder = Provider.of<List<Order>>(context);
-    return Positioned(
-      bottom: 0,
-      left: 0,
-      right: 0,
-      child: ListTile(
-        title: Text('Total Tagihan'),
-        subtitle: Text(args.event.price == 0 ? "Gratis" : rupiah(args.event.price, separator: ',', trailing: '.00'),
-          style: TextStyle(
-            fontSize: 15, fontWeight: FontWeight.w500
-          ),
-        ),
-        trailing: RaisedButton(
-          onPressed: () async {
-            if(_paymentMethod.contains("Tidak tersedia")) {
-              myToast("Tolong ganti metode pembayaran !", Colors.red);
-            } else {
-              if(myOrder != null) {
-                myToast("Anda telah melakukan order pada event ini sebelumnya, silahkan pilih event lain !", Colors.red);
-                Navigator.pushReplacementNamed(context, '/event-search');
-              } else {
-                Map<String, dynamic> _order = {
-                  "uid": user.uid,
-                  "eid": args.event.eid,
-                  "orderDate": DateTime.now(),
-                  "paymentDate": null, 
-                  "paymentMethod": _paymentMethod,
-                  "paymentTotal": args.event.price,
-                  "status": "Menunggu pembayaran",
-                };
-                await DatabaseServiceOrders().orderCreate(_order);
-                myToast("Pemesanan tiket berhasil, silahkan bayar sesuai metode pembayaran !", Colors.green[400]);
-                Navigator.pushReplacementNamed(context, '/home');
-              }
-            }
-          },
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10)
-          ),
-          color: !_paymentMethod.contains("Tidak tersedia") ? Colors.green[400] : Colors.red,
-          padding: EdgeInsets.all(15),
-          child: Text("Bayar",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14
+    return StreamBuilder<UserDetail>(
+      stream: DatabaseServiceUsers(uid: user.uid).userData,
+      builder: (context, snapshot) {
+        UserDetail userDetail = snapshot.data;
+        // print(userDetail != null ? userDetail.name : userDetail!=null);
+        return userDetail == null ? Center(child: CircularProgressIndicator()) : Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: ListTile(
+            title: Text('Total Tagihan'),
+            subtitle: Text(args.event.price == 0 ? "Gratis" : rupiah(args.event.price, separator: ',', trailing: '.00'),
+              style: TextStyle(
+                fontSize: 15, fontWeight: FontWeight.w500
+              ),
             ),
-          ),    
-        ),
-      ),
+            trailing: RaisedButton(
+              onPressed: () async {
+                if(_paymentMethod.contains("Tidak tersedia")) {
+                  myToast("Tolong ganti metode pembayaran !", Colors.red);
+                } else {
+                  if(myOrder.length > 0) {
+                    myOrder.forEach((element) {
+                      final eventDate = DateTime.fromMillisecondsSinceEpoch(int.parse(args.event.timeStart.toString().substring(18, 28)) * 1000);
+                      final orderEventDate = DateTime.fromMillisecondsSinceEpoch(int.parse(element.eventData.elementAt(11).toString().substring(18, 28)) * 1000);
+                      
+                      if(element.eventData.contains(args.event.eid)) {
+                        myToast("Anda telah melakukan order pada event ini sebelumnya, silahkan pilih event lain !", Colors.red);
+                        Navigator.pop(context);
+                        return true;
+                      } else if(eventDate.isAtSameMomentAs(orderEventDate)) {
+                        myToast("Anda tidak bisa mengikuti event\n Karena anda telah mengikuti event '${element.eventData.elementAt(12)}' dengan jadwal yang sama\n Silahkan pilih event lain !", Colors.red);
+                        Navigator.pop(context);
+                        return true;
+                      } else {
+                        myAlertDialog(context, "Pastikan tidak ada event dengan jadwal yang sama !\nTekan ""Lanjutkan"" untuk menyetujui.",userDetail,_func,"Pemesanan tiket berhasil, silahkan bayar sesuai metode pembayaran !", Colors.green, '/home');
+                      }
+                    });
+                  } else {
+                    myAlertDialog(context,"Apakah anda yakin akan mendaftar di Event ini ?\nTekan 'Lanjutkan' untuk menyetujui.",userDetail,_func,"Pemesanan tiket berhasil, silahkan bayar sesuai metode pembayaran !", Colors.green, '/home');
+                  }
+                }
+              },
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10)
+              ),
+              color: !_paymentMethod.contains("Tidak tersedia") ? Colors.green[400] : Colors.red,
+              padding: EdgeInsets.all(15),
+              child: Text("Bayar",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14
+                ),
+              ),    
+            ),
+          ),
+        );
+      }
     );
   }
 }

@@ -1,10 +1,8 @@
 import 'package:comat_apps/models/event.dart';
 import 'package:comat_apps/ui/event/event_argument.dart';
 import 'package:comat_apps/ui/event/event_detail.dart';
-import 'package:comat_apps/ui/event/event_search.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 class DynamicLinkService {
   Future handleDynamicLinks(BuildContext context, List<Event> events) async {
     final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance.getInitialLink();

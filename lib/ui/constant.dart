@@ -44,10 +44,27 @@ final Color bodyColor = Colors.grey[50];
 // Category
 var category = [
   {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "All"},
-  {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Band", "key": "type", "where":"isEqualTo", "value": "Music"},
-  {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Seminar", "key": "type", "value": "Seminar", "where":"isEqualTo"},
-  {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Webinar", "key": "type", "value": "Webinar", "where":"isEqualTo"},
-  {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Workshop", "key": "type", "value": "Workshop", "where":"isEqualTo"},
+  {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Band", "key": "category", "where":"isEqualTo", "value": "Music"},
+  {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Seminar", "key": "category", "value": "Seminar", "where":"isEqualTo"},
+  {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Webinar", "key": "category", "value": "Webinar", "where":"isEqualTo"},
+  {"colorStart": Colors.blue, "colorEnd": Colors.blue[100], "title": "Workshop", "key": "category", "value": "Workshop", "where":"isEqualTo"},
 ];
+
+// Button
+const buttonTextStyle = TextStyle(
+  fontSize: 16,
+  fontWeight: FontWeight.w600
+);
+
+const chartLableTextStyle = TextStyle(
+  color: Colors.grey,
+  fontSize: 14,
+  fontWeight: FontWeight.w500
+);
+
+const tabTextStyle = TextStyle(
+  fontSize: 16,
+  fontWeight: FontWeight.w600
+);
 
 var key = ['i', 'c', 'k', 's', 'a', 'n', '0', '1'];

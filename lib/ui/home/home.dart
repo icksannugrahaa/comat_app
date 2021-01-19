@@ -18,7 +18,6 @@ class Home extends StatelessWidget {
   final bool dynamicLink;
   final user;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  DateTime currentBackPressTime;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +34,8 @@ class Home extends StatelessWidget {
     );
   }
   Future<bool> onWillPop() {
+    DateTime currentBackPressTime;
+    
     DateTime now = DateTime.now();
     if (currentBackPressTime == null || 
         now.difference(currentBackPressTime) > Duration(seconds: 2)) {

@@ -1,6 +1,5 @@
 // System
 import 'dart:io';
-
 import 'package:comat_apps/ui/order/order.dart';
 import 'package:comat_apps/ui/order/order_argument.dart';
 import 'package:flutter/material.dart';
@@ -36,24 +35,11 @@ class _EventDetailState extends State<EventDetail> {
   final MyHelpers _helpers = MyHelpers();
   ScreenshotController screenshotController = ScreenshotController();
 
-  String _platformVersion = 'Unknown';
-
   @override
   void initState() {
     super.initState();
-    initPlatformState();
   }
-
-  Future<void> initPlatformState() async {
-    String platformVersion;
-
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
-  }
-
+  
   void _showSocialMediaShare(context, e, date) {
     final String tanggal = DateFormat('dd').format(date);
     final String bulan = DateFormat('MM').format(date);
@@ -468,11 +454,6 @@ class BuildButtonBuy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final eventCommittee = Provider.of<List<EventCommittee>>(context);
-    if(eventCommittee != null) {
-      eventCommittee.forEach((element) {
-        print("user yang tersedia : ${element.userId}");
-      });
-    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -501,9 +482,19 @@ class BuildButtonBuy extends StatelessWidget {
           onPressed: () {
             if(args.event.status == true && !(difference < 1)) {
               if(user != null) {
-                if(eventCommittee.isNotEmpty) {
-                  myToast("Anda tidak dapat mengikuti event yang anda buat !", Colors.green[400]);
-
+                if(eventCommittee != null) {
+                  for (int i = 0; i < eventCommittee.length; i++) {
+                    if(user.uid == eventCommittee[i].userData[0]) {
+                      myToast("Anda tidak dapat mengikuti event yang anda buat !", Colors.green[400]);
+                      break;
+                    } else if(i == eventCommittee.length - 1) {
+                      Navigator.pushNamed(
+                        context,
+                        OrderPage.routeName,
+                        arguments: OrderArguments(args.event),
+                      );
+                    }
+                  }
                 } else if(difference < 60) {
                   myToast("Segera daftar, Waktu pendaftaran tersisa $difference menit !", Colors.green[400]);
                 } else {

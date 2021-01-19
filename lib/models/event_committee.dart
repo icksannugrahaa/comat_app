@@ -1,8 +1,8 @@
 class EventCommittee {
   final String collectionId;
   final String committeeCode;
-  final String userId;
+  final List<dynamic> userData;
   final String level;
 
-  EventCommittee({this.collectionId, this.committeeCode, this.level, this.userId});
+  EventCommittee({this.collectionId, this.committeeCode, this.level, this.userData});
 }

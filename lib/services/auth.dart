@@ -127,6 +127,7 @@ class AuthService {
   // Sign Out
   Future signOut() async {
     try {
+      await _googleSignIn.signOut();
       return await _auth.signOut();
     } catch (e) {
       print(e.toString());

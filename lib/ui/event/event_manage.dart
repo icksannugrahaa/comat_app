@@ -37,9 +37,7 @@ class _EventManageState extends State<EventManage> {
         break;
       case 2:
         setSelectedEvent(null);
-        return Text(
-          'Index 2: School',
-        );
+        return Center(child: Text("Belum tersedia !", style: TextStyle(fontSize: 24),));
         break;
       default:
         return EventOrganizer();
